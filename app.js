@@ -16,8 +16,8 @@ const DEFAULT_MEALS = [
     eiwitten: 45,
     ingredienten: [
       "600 g kipfilet",
-      "4 zoete aardappelen",
-      "2 broccoli",
+      "800 g / 4 zoete aardappelen",
+      "600 g / 2 broccoli",
       "2½ el olijfolie",
       "Paprikapoeder",
       "Knoflookpoeder",
@@ -55,8 +55,8 @@ Verdeel over 4 porties.`,
     ingredienten: [
       "300 g zalmfilet",
       "150 g quinoa (ongekookt)",
-      "1 courgette",
-      "1 paprika",
+      "150 g / 1 courgette",
+      "150 g / 1 paprika",
       "1½ el olijfolie",
       "Citroensap",
       "Peper",
@@ -123,9 +123,9 @@ Verdeel over 4 maaltijden.`,
     ingredienten: [
       "600 g kipfilet",
       "300 g volkoren couscous",
-      "1 paprika",
-      "1 courgette",
-      "1 rode ui",
+      "130 g / 1 paprika",
+      "130 g / 1 courgette",
+      "130 g / 1 rode ui",
       "2½ el olijfolie",
       "Citroensap",
       "Oregano",
@@ -259,7 +259,7 @@ Verdeel over 2 porties.`,
     ingredienten: [
       "600 g kipfilet",
       "300 g zilvervliesrijst",
-      "2 broccoli",
+      "600 g / 2 broccoli",
       "4 el teriyakisaus (light)"
     ],
     bereidingswijze: `Kook de rijst volgens de verpakking.
@@ -327,7 +327,7 @@ Verdeel samen met rijst over 4 porties.`,
     eiwitten: 45,
     ingredienten: [
       "600 g mager rundergehakt",
-      "6 aardappelen",
+      "800 g / 6 aardappelen",
       "2 paprika's",
       "1 grote ui",
       "400 g tomatenblokjes (blik)",
@@ -666,6 +666,12 @@ function parseIngredient(raw) {
    ['2¾','2.75'],['1¾','1.75'],['3¾','3.75'],
    ['½','0.5'],['¼','0.25'],['¾','0.75'],['⅓','0.33'],['⅔','0.67']
   ].forEach(([f, v]) => { s = s.split(f).join(v); });
+
+  // "800 g / 4 zoete aardappelen" → boodschappenlijst gebruikt alleen het stuks-deel
+  const slashMatch = s.match(/^(\d+(?:[.,]\d+)?)\s+\w+\s*\/\s*(\d+(?:[.,]\d+)?)\s+(.+)$/);
+  if (slashMatch) {
+    return { qty: parseFloat(slashMatch[2].replace(',', '.')), unit: '', naam: slashMatch[3].trim().toLowerCase() };
+  }
 
   const m = s.match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
   if (m) {
