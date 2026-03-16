@@ -1169,11 +1169,20 @@ function renderDagboek() {
   list.innerHTML = days.map(date => {
     const key = dateKey(date);
     const isToday = key === todayKey;
-    const dayMeals = (dagLog[key] || []).map(id => meals.find(m => m.id === id)).filter(Boolean);
     const totals = getDayTotals(key);
 
-    const chips = dayMeals.length
-      ? dayMeals.map(m => `<div class="day-meal-chip">${escapeHTML(m.naam)}</div>`).join('')
+    const nameCount = {};
+    const nameOrder = [];
+    (dagLog[key] || []).forEach(id => {
+      let naam;
+      if (typeof id === 'number') { const m = meals.find(x => x.id === id); naam = m ? m.naam : null; }
+      else if (typeof id === 'string' && id.startsWith('c:')) { naam = id.slice(2); }
+      if (!naam) return;
+      if (!nameCount[naam]) { nameCount[naam] = 0; nameOrder.push(naam); }
+      nameCount[naam]++;
+    });
+    const chips = nameOrder.length
+      ? nameOrder.map(n => `<div class="day-meal-chip">${escapeHTML(n)}${nameCount[n] > 1 ? ` ×${nameCount[n]}` : ''}</div>`).join('')
       : `<span class="day-empty">Niets gelogd — tik om toe te voegen</span>`;
 
     return `<div class="day-card${isToday ? ' today' : ''}" onclick="openDayPicker('${key}')">
@@ -1217,16 +1226,40 @@ function renderDayPickerContent(key) {
     if (!catMeals.length) return;
     html += `<div class="dp-cat-title">${CAT_LABELS[cat]}</div>`;
     catMeals.forEach(m => {
-      const on = selected.includes(m.id);
-      html += `<div class="dp-meal-row${on ? ' selected' : ''}" onclick="toggleDayMeal('${key}', ${m.id})">
-        <div class="dp-check${on ? ' on' : ''}">${on ? '✓' : ''}</div>
-        <div class="dp-meal-info">
+      const count = selected.filter(x => x === m.id).length;
+      html += `<div class="dp-meal-row${count > 0 ? ' selected' : ''}">
+        <div class="dp-meal-info" onclick="adjustDayMeal('${key}', ${m.id}, 1)">
           <span class="dp-meal-name">${escapeHTML(m.naam)}</span>
           <span class="dp-meal-macros">🔥 ${m.calorieen} kcal · 💪 ${m.eiwitten}g eiwit</span>
+        </div>
+        <div class="dp-counter">
+          <button class="dp-counter-btn" onclick="adjustDayMeal('${key}', ${m.id}, -1)"${count === 0 ? ' disabled' : ''}>−</button>
+          <span class="dp-counter-num">${count > 0 ? count : ''}</span>
+          <button class="dp-counter-btn dp-counter-add" onclick="adjustDayMeal('${key}', ${m.id}, 1)">+</button>
         </div>
       </div>`;
     });
   });
+
+  // Custom items
+  const customEntries = selected.map((x, i) => ({ x, i })).filter(({ x }) => typeof x === 'string' && x.startsWith('c:'));
+  if (customEntries.length) {
+    html += `<div class="dp-cat-title">Eigen items</div>`;
+    customEntries.forEach(({ x, i }) => {
+      html += `<div class="dp-meal-row selected">
+        <div class="dp-meal-info" style="cursor:default">
+          <span class="dp-meal-name">${escapeHTML(x.slice(2))}</span>
+        </div>
+        <button class="dp-counter-btn" onclick="removeDayItem('${key}', ${i})">✕</button>
+      </div>`;
+    });
+  }
+
+  html += `<div class="dp-custom-add">
+    <input id="dp-custom-input" type="text" placeholder="Eigen product toevoegen…" autocomplete="off"
+      onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomDayItem('${key}');}">
+    <button class="dp-counter-btn dp-counter-add" onclick="addCustomDayItem('${key}')">+</button>
+  </div>`;
 
   const totals = getDayTotals(key);
   const hasSelected = selected.length > 0;
@@ -1244,17 +1277,37 @@ function renderDayPickerContent(key) {
   document.getElementById('daypicker-content').innerHTML = html;
 }
 
-function toggleDayMeal(key, mealId) {
+function adjustDayMeal(key, mealId, delta) {
   if (!dagLog[key]) dagLog[key] = [];
-  const idx = dagLog[key].indexOf(mealId);
-  if (idx >= 0) dagLog[key].splice(idx, 1);
-  else dagLog[key].push(mealId);
+  if (delta > 0) {
+    dagLog[key].push(mealId);
+  } else {
+    const idx = dagLog[key].lastIndexOf(mealId);
+    if (idx >= 0) dagLog[key].splice(idx, 1);
+  }
+  saveState();
+  renderDayPickerContent(key);
+}
+
+function removeDayItem(key, idx) {
+  if (!dagLog[key]) return;
+  dagLog[key].splice(idx, 1);
+  saveState();
+  renderDayPickerContent(key);
+}
+
+function addCustomDayItem(key) {
+  const input = document.getElementById('dp-custom-input');
+  const val = (input && input.value.trim()) || '';
+  if (!val) return;
+  if (!dagLog[key]) dagLog[key] = [];
+  dagLog[key].push('c:' + val);
   saveState();
   renderDayPickerContent(key);
 }
 
 function addDayToShopping(key) {
-  const ids = dagLog[key] || [];
+  const ids = (dagLog[key] || []).filter(x => typeof x === 'number');
   let total = 0;
   ids.forEach(mealId => {
     const m = meals.find(x => x.id === mealId);
@@ -1276,15 +1329,20 @@ function copyWeekSummary() {
   days.forEach(date => {
     const key = dateKey(date);
     const ids = dagLog[key] || [];
-    const dayMeals = ids.map(id => meals.find(m => m.id === id)).filter(Boolean);
     const totals = getDayTotals(key);
+    const dayLines = [];
+    ids.forEach(id => {
+      if (typeof id === 'number') {
+        const m = meals.find(x => x.id === id);
+        if (m) dayLines.push(`  ${CAT_LABELS[m.categorie || 'diner']} — ${m.naam} (🔥 ${m.calorieen} kcal · 💪 ${m.eiwitten}g eiwit)`);
+      } else if (typeof id === 'string' && id.startsWith('c:')) {
+        dayLines.push(`  Eigen item — ${id.slice(2)}`);
+      }
+    });
 
     lines.push(`${DAG_NL[date.getDay()]} ${date.getDate()} ${MAAND_NL[date.getMonth()]}`);
-    if (dayMeals.length) {
-      dayMeals.forEach(m => {
-        const cat = CAT_LABELS[m.categorie || 'diner'];
-        lines.push(`  ${cat} — ${m.naam} (🔥 ${m.calorieen} kcal · 💪 ${m.eiwitten}g eiwit)`);
-      });
+    if (dayLines.length) {
+      dayLines.forEach(l => lines.push(l));
       lines.push(`  Totaal: 🔥 ${totals.cal} kcal · 💪 ${totals.eiwit}g eiwit`);
     } else {
       lines.push('  Niets gelogd');

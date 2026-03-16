@@ -661,7 +661,8 @@ html, body {
 }
 .modal-close:active { background: var(--border); }
 
-#detail-content {
+#detail-content,
+#daypicker-content {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   flex: 1;
@@ -958,33 +959,70 @@ html, body {
   align-items: center;
   gap: 14px;
   padding: 12px 20px;
-  cursor: pointer;
+  cursor: default;
   transition: background 0.1s;
   border-bottom: 1px solid var(--border);
 }
-.dp-meal-row:active { background: var(--bg); }
 .dp-meal-row.selected { background: var(--primary-pale); }
 
-.dp-check {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  background: var(--bg);
+.dp-meal-info { flex: 1; min-width: 0; cursor: pointer; }
+.dp-meal-info:active { opacity: 0.7; }
+
+.dp-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   flex-shrink: 0;
+}
+.dp-counter-num {
+  min-width: 20px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.dp-counter-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
-  transition: all 0.15s;
+  color: var(--text-mid);
+  line-height: 1;
+  transition: background 0.1s;
+  flex-shrink: 0;
 }
-.dp-check.on {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: #fff;
+.dp-counter-btn:disabled { opacity: 0.3; cursor: default; }
+.dp-counter-btn.dp-counter-add { background: var(--primary); border-color: var(--primary); color: #fff; }
+.dp-counter-btn:active:not(:disabled) { background: var(--primary-pale); }
+.dp-counter-btn.dp-counter-add:active:not(:disabled) { background: var(--primary-mid); }
+
+.dp-custom-add {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: 2px solid var(--border);
+  background: var(--bg);
 }
-.dp-meal-info { flex: 1; min-width: 0; }
+.dp-custom-add input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 15px;
+  background: var(--card);
+  color: var(--text);
+  outline: none;
+  font-family: inherit;
+}
+.dp-custom-add input:focus { border-color: var(--primary-light); }
 .dp-meal-name {
   font-size: 15px;
   font-weight: 600;
