@@ -1,4 +1,4 @@
-const CACHE = 'maaltijd-v2';
+const CACHE = 'maaltijd-v3';
 const FILES = [
   './index.html', './styles.css', './app.js', './manifest.json', './icon.svg',
   './images/kip-zoete-aardappel.png',
@@ -11,6 +11,7 @@ const FILES = [
   './images/kip-teriyaki.png',
   './images/chili-con-carne.png',
   './images/kip-curry.png',
+  './images/turkse-gehakt-schotel.png',
 ];
 
 self.addEventListener('install', e => {

@@ -313,6 +313,45 @@ Verdeel samen met rijst over 4 porties.`,
     bewaren: "4 dagen koelkast | zeer goed invriesbaar"
   },
   {
+    id: 11,
+    naam: "Turkse Gehakt Schotel met Aardappel",
+    emoji: "🥘",
+    kleur: "brown",
+    afbeelding: "./images/turkse-gehakt-schotel.png",
+    invriesbaar: true,
+    dagtype: "rust",
+    calorieen: 630,
+    eiwitten: 45,
+    ingredienten: [
+      "600 g mager rundergehakt",
+      "800 g aardappelen",
+      "2 paprika's",
+      "1 grote ui",
+      "400 g tomatenblokjes (blik)",
+      "2 teentjes knoflook",
+      "Paprikapoeder",
+      "Komijn",
+      "Olijfolie",
+      "Peper",
+      "Zout"
+    ],
+    bereidingswijze: `Verwarm de oven voor op 200 °C.
+
+Schil de aardappelen en snijd ze in blokjes van ±2 cm. Meng met olijfolie, peper en zout en verdeel over een bakplaat. Rooster 20 minuten.
+
+Bak het rundergehakt rul en bruin in een grote pan.
+
+Snipper de ui en knoflook, snijd de paprika's in reepjes. Voeg toe aan het gehakt en bak 5 minuten mee.
+
+Voeg tomatenblokjes, paprikapoeder en komijn toe. Laat 10 minuten sudderen op laag vuur.
+
+Meng met de geroosterde aardappelen of serveer apart.
+
+Verdeel over 4 porties.`,
+    porties: 4,
+    bewaren: "4 dagen koelkast | goed invriesbaar"
+  },
+  {
     id: 10,
     naam: "Kip Curry met Rijst",
     emoji: "🍛",
