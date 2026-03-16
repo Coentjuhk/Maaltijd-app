@@ -1,4 +1,4 @@
-const CACHE = 'maaltijd-v6';
+const CACHE = 'maaltijd-v7';
 const FILES = [
   './index.html', './styles.css', './app.js', './manifest.json', './icon.svg',
   './images/kip-zoete-aardappel.png',

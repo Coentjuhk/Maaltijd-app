@@ -16,8 +16,8 @@ const DEFAULT_MEALS = [
     eiwitten: 45,
     ingredienten: [
       "600 g kipfilet",
-      "800 g zoete aardappel",
-      "600 g broccoli",
+      "4 zoete aardappelen",
+      "2 broccoli",
       "2½ el olijfolie",
       "Paprikapoeder",
       "Knoflookpoeder",
@@ -55,7 +55,8 @@ Verdeel over 4 porties.`,
     ingredienten: [
       "300 g zalmfilet",
       "150 g quinoa (ongekookt)",
-      "300 g courgette en paprika",
+      "1 courgette",
+      "1 paprika",
       "1½ el olijfolie",
       "Citroensap",
       "Peper",
@@ -122,7 +123,9 @@ Verdeel over 4 maaltijden.`,
     ingredienten: [
       "600 g kipfilet",
       "300 g volkoren couscous",
-      "400 g paprika, courgette en rode ui",
+      "1 paprika",
+      "1 courgette",
+      "1 rode ui",
       "2½ el olijfolie",
       "Citroensap",
       "Oregano",
@@ -256,7 +259,7 @@ Verdeel over 2 porties.`,
     ingredienten: [
       "600 g kipfilet",
       "300 g zilvervliesrijst",
-      "600 g broccoli",
+      "2 broccoli",
       "4 el teriyakisaus (light)"
     ],
     bereidingswijze: `Kook de rijst volgens de verpakking.
@@ -324,7 +327,7 @@ Verdeel samen met rijst over 4 porties.`,
     eiwitten: 45,
     ingredienten: [
       "600 g mager rundergehakt",
-      "800 g aardappelen",
+      "6 aardappelen",
       "2 paprika's",
       "1 grote ui",
       "400 g tomatenblokjes (blik)",
@@ -589,6 +592,14 @@ let currentWeekOffset = 0;
 let selectedDayKey   = null;
 
 const CAT_LABELS = { ontbijt: '🌅 Ontbijt', lunch: '🥗 Lunch', snack: '🍎 Snack', diner: '🍽️ Diner' };
+
+// Pantry items: worden getoond in ingrediëntenlijst maar NIET aan boodschappenlijst toegevoegd
+const PANTRY_ITEMS = new Set([
+  'peper', 'zout', 'paprikapoeder', 'knoflookpoeder', 'oregano', 'komijn',
+  'chilipoeder', 'italiaanse kruiden', 'olijfolie', 'sesamolie', 'citroensap',
+  'knoflookpoeder', 'gemalen koriander', 'kurkuma', 'kaneel', 'nootmuskaat',
+  'droge tijm', 'tijm', 'rozemarijn', 'basilicum', 'peterselie', 'bieslook',
+]);
 const DAG_NL     = ['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'];
 const DAG_NL_K   = ['Zo','Ma','Di','Wo','Do','Vr','Za'];
 const MAAND_NL   = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
@@ -679,6 +690,8 @@ function formatItemDisplay(item) {
 
 function mergeOrAddIngredient(raw, mealId) {
   const p   = parseIngredient(raw);
+  // Pantry items tonen we wel in het recept maar voegen we niet toe aan de boodschappenlijst
+  if (PANTRY_ITEMS.has(p.naam.toLowerCase())) return;
   const key = mealId !== null ? String(mealId) : null;
   const existing = shoppingList.find(x =>
     !x.afgevinkt && x.naam === p.naam && x.unit === p.unit
