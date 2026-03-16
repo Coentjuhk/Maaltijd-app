@@ -9,6 +9,7 @@ const DEFAULT_MEALS = [
     naam: "Geroosterde Kip, Zoete Aardappel & Broccoli",
     emoji: "🍗",
     kleur: "orange",
+    afbeelding: "./images/kip-zoete-aardappel.png",
     invriesbaar: true,
     dagtype: "rust",
     calorieen: 600,
@@ -46,6 +47,7 @@ Verdeel over 4 porties.`,
     naam: "Zalm met Quinoa & Geroosterde Groenten",
     emoji: "🐟",
     kleur: "teal",
+    afbeelding: "./images/zalm-quinoa.png",
     invriesbaar: false,
     dagtype: "sport",
     calorieen: 650,
@@ -76,6 +78,7 @@ Verdeel quinoa, groenten en zalm over 2 porties.`,
     naam: "Kip Bolognese met Volkoren Pasta",
     emoji: "🍝",
     kleur: "red",
+    afbeelding: "./images/kip-bolognese.png",
     invriesbaar: true,
     dagtype: "sport",
     calorieen: 620,
@@ -111,6 +114,7 @@ Verdeel over 4 maaltijden.`,
     naam: "Griekse Kip met Couscous & Gegrilde Groenten",
     emoji: "🥙",
     kleur: "blue",
+    afbeelding: "./images/griekse-kip-couscous.png",
     invriesbaar: false,
     dagtype: "rust",
     calorieen: 600,
@@ -144,6 +148,7 @@ Meng couscous, kip en groenten. Verdeel over 4 porties.`,
     naam: "Tofu Roerbak met Groenten & Zilvervliesrijst",
     emoji: "🥡",
     kleur: "green",
+    afbeelding: "./images/tofu-roerbak.png",
     invriesbaar: false,
     dagtype: "rust",
     calorieen: 580,
@@ -174,6 +179,7 @@ Meng met de rijst en verdeel over 2 porties.`,
     naam: "Rundergehakt met Paprika & Rijst",
     emoji: "🥩",
     kleur: "brown",
+    afbeelding: "./images/rundergehakt-paprika.png",
     invriesbaar: true,
     dagtype: "rust",
     calorieen: 630,
@@ -209,6 +215,7 @@ Verdeel samen met rijst over 4 porties.`,
     naam: "Rijstnoedels met Kip & Roerbakgroenten",
     emoji: "🍜",
     kleur: "purple",
+    afbeelding: "./images/rijstnoedels-kip.png",
     invriesbaar: false,
     dagtype: "sport",
     calorieen: 600,
@@ -241,6 +248,7 @@ Verdeel over 2 porties.`,
     naam: "Kip Teriyaki met Rijst & Broccoli",
     emoji: "🍱",
     kleur: "teal",
+    afbeelding: "./images/kip-teriyaki.png",
     invriesbaar: true,
     dagtype: "sport",
     calorieen: 610,
@@ -270,6 +278,7 @@ Meng alles en verdeel over 4 porties.`,
     naam: "Chili con Carne met Rijst",
     emoji: "🌶️",
     kleur: "red",
+    afbeelding: "./images/chili-con-carne.png",
     invriesbaar: true,
     dagtype: "beide",
     calorieen: 620,
@@ -308,6 +317,7 @@ Verdeel samen met rijst over 4 porties.`,
     naam: "Kip Curry met Rijst",
     emoji: "🍛",
     kleur: "orange",
+    afbeelding: "./images/kip-curry.png",
     invriesbaar: true,
     dagtype: "sport",
     calorieen: 600,
@@ -355,7 +365,19 @@ function saveState() {
 function loadState() {
   try {
     const m = localStorage.getItem('ma_meals');
-    meals = m ? JSON.parse(m) : JSON.parse(JSON.stringify(DEFAULT_MEALS));
+    if (m) {
+      const loaded = JSON.parse(m);
+      // Merge: voeg afbeelding toe aan bestaande maaltijden als DEFAULT_MEALS die heeft
+      meals = loaded.map(meal => {
+        if (!meal.afbeelding) {
+          const def = DEFAULT_MEALS.find(d => d.id === meal.id);
+          if (def && def.afbeelding) return { ...meal, afbeelding: def.afbeelding };
+        }
+        return meal;
+      });
+    } else {
+      meals = JSON.parse(JSON.stringify(DEFAULT_MEALS));
+    }
   } catch { meals = JSON.parse(JSON.stringify(DEFAULT_MEALS)); }
 
   try {
@@ -387,7 +409,7 @@ function gradStyle(kleur) {
 
 // ===== FILTER LOGIC =====
 function filteredMeals() {
-  return meals.filter(m => {
+  let result = meals.filter(m => {
     if (activeFilters.has('invriesbaar') && !m.invriesbaar) return false;
     if (activeFilters.has('sport') && !activeFilters.has('rust')) {
       if (m.dagtype === 'rust') return false;
@@ -395,11 +417,14 @@ function filteredMeals() {
     if (activeFilters.has('rust') && !activeFilters.has('sport')) {
       if (m.dagtype === 'sport') return false;
     }
-    if (activeFilters.has('cal-laag') && m.calorieen >= 500) return false;
-    if (activeFilters.has('cal-hoog') && m.calorieen <= 700) return false;
-    if (activeFilters.has('eiwit-hoog') && m.eiwitten <= 40) return false;
     return true;
   });
+  if (activeFilters.has('sort-cal')) {
+    result = [...result].sort((a, b) => a.calorieen - b.calorieen);
+  } else if (activeFilters.has('sort-alpha')) {
+    result = [...result].sort((a, b) => a.naam.localeCompare(b.naam, 'nl'));
+  }
+  return result;
 }
 
 // ===== RENDER MEALS =====
@@ -419,37 +444,39 @@ function renderMeals() {
 }
 
 function mealCardHTML(m) {
-  const count = counts[m.id] || 0;
-  const dagBadge = dagBadgeHTML(m.dagtype);
-  const freezeBadge = m.invriesbaar
-    ? `<span class="badge freeze">❄️ Invriesbaar</span>` : '';
+  const dagtype = m.dagtype;
+  const dagTag = dagtype === 'sport'
+    ? `<span class="card-tag sport">🏃 Sportdag</span>`
+    : dagtype === 'rust'
+      ? `<span class="card-tag rust">😴 Rustdag</span>`
+      : `<span class="card-tag beide">📅 Sport & Rust</span>`;
+  const freezeTag = m.invriesbaar ? `<span class="card-tag freeze">❄️ Invries</span>` : '';
+  const portiesTag = m.porties ? `<span>🍴 ${m.porties}p</span>` : '';
 
-  const imgContent = m.afbeelding
+  const bgContent = m.afbeelding
     ? `<img src="${escapeAttr(m.afbeelding)}" alt="${escapeAttr(m.naam)}">`
-    : `<span style="font-size:56px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))">${m.emoji || '🍽️'}</span>`;
-
-  const imgClass = m.afbeelding ? 'card-image has-img' : 'card-image';
+    : `<span class="card-emoji">${m.emoji || '🍽️'}</span>`;
 
   return `
   <div class="meal-card" onclick="openDetail(${m.id})">
-    <div class="${imgClass}" style="${m.afbeelding ? '' : gradStyle(m.kleur)}">
-      ${imgContent}
+    <div class="card-bg" style="${m.afbeelding ? '' : gradStyle(m.kleur)}">
+      ${bgContent}
     </div>
-    <div class="card-body">
-      <div class="card-name">${escapeHTML(m.naam)}</div>
-      <div class="card-badges">
-        ${dagBadge}
-        ${freezeBadge}
+    <div class="card-overlay">
+      <div class="card-ov-name">${escapeHTML(m.naam)}</div>
+      <div class="card-ov-tags">
+        ${dagTag}
+        ${freezeTag}
       </div>
-      <div class="card-macros">
-        <div class="macro"><span>🔥</span>${m.calorieen} kcal</div>
-        <div class="macro"><span>💪</span>${m.eiwitten}g eiwit</div>
-      </div>
-      <div class="card-footer">
-        <div class="counter" onclick="event.stopPropagation()">
-          <button class="counter-btn" onclick="changeCount(${m.id},-1)">−</button>
-          <span class="counter-val${count > 0 ? ' nonzero' : ''}" id="cnt-${m.id}">${count}</span>
-          <button class="counter-btn" onclick="changeCount(${m.id},1)">+</button>
+      <div class="card-ov-footer">
+        <div class="card-ov-stats">
+          <span>🔥 ${m.calorieen}</span>
+          <span>💪 ${m.eiwitten}g</span>
+          ${portiesTag}
+        </div>
+        <div class="card-ov-btns" onclick="event.stopPropagation()">
+          <button class="card-btn-minus" onclick="removeIngredientsFromShopping(${m.id})" title="Verwijder van lijst">−</button>
+          <button class="card-btn-plus" onclick="addIngredientsToShopping(${m.id}, true)" title="Voeg toe aan lijst">+</button>
         </div>
       </div>
     </div>
@@ -547,16 +574,25 @@ function deleteMeal(id) {
 }
 
 // ===== SHOPPING LIST =====
-function addIngredientsToShopping(mealId) {
+function addIngredientsToShopping(mealId, fromCard = false) {
   const m = meals.find(x => x.id === mealId);
   if (!m || !m.ingredienten) return;
   m.ingredienten.forEach(naam => {
-    shoppingList.push({ id: Date.now() + Math.random(), naam, afgevinkt: false });
+    shoppingList.push({ id: Date.now() + Math.random(), naam, afgevinkt: false, mealId });
   });
   saveState();
   updateShoppingBadge();
-  closeDetail();
+  if (!fromCard) closeDetail();
   showToast(`${m.ingredienten.length} ingrediënten toegevoegd`);
+}
+
+function removeIngredientsFromShopping(mealId) {
+  const before = shoppingList.length;
+  shoppingList = shoppingList.filter(x => x.mealId !== mealId);
+  const removed = before - shoppingList.length;
+  saveState();
+  updateShoppingBadge();
+  showToast(removed > 0 ? `${removed} ingrediënten verwijderd` : 'Geen ingrediënten op de lijst');
 }
 
 function addShoppingItem() {

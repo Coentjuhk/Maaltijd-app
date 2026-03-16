@@ -1,5 +1,17 @@
-const CACHE = 'maaltijd-v1';
-const FILES = ['./index.html', './styles.css', './app.js', './manifest.json', './icon.svg'];
+const CACHE = 'maaltijd-v2';
+const FILES = [
+  './index.html', './styles.css', './app.js', './manifest.json', './icon.svg',
+  './images/kip-zoete-aardappel.png',
+  './images/zalm-quinoa.png',
+  './images/kip-bolognese.png',
+  './images/griekse-kip-couscous.png',
+  './images/tofu-roerbak.png',
+  './images/rundergehakt-paprika.png',
+  './images/rijstnoedels-kip.png',
+  './images/kip-teriyaki.png',
+  './images/chili-con-carne.png',
+  './images/kip-curry.png',
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));

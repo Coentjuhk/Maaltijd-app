@@ -160,49 +160,119 @@ html, body {
 
 /* ===== MEAL CARD ===== */
 .meal-card {
-  background: var(--card);
+  position: relative;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,.07);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  height: 190px;
+  flex-shrink: 0;
+  box-shadow: 0 3px 16px rgba(0,0,0,.13);
   cursor: pointer;
+  transition: transform 0.12s ease;
 }
-.meal-card:active { transform: scale(0.98); box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+.meal-card:active { transform: scale(0.97); }
 
-.card-image {
-  width: 100%;
-  height: 130px;
+.card-bg {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 56px;
-  position: relative;
-  overflow: hidden;
 }
-.card-image.has-img img {
+.card-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
-.card-body {
-  padding: 14px 16px 12px;
+.card-emoji {
+  font-size: 72px;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,.4));
+  line-height: 1;
+  user-select: none;
 }
 
-.card-name {
+.card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.88) 100%);
+  padding: 44px 14px 13px;
+  color: #fff;
+}
+
+.card-ov-name {
   font-size: 16px;
   font-weight: 700;
-  color: var(--text);
-  margin-bottom: 8px;
   line-height: 1.25;
+  margin-bottom: 6px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
 }
 
-.card-badges {
+.card-ov-tags {
   display: flex;
+  gap: 5px;
+  margin-bottom: 9px;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
 }
+.card-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.22);
+}
+.card-tag.sport  { background: rgba(21,101,192,0.72); }
+.card-tag.rust   { background: rgba(106,27,154,0.72); }
+.card-tag.beide  { background: rgba(230,81,0,0.72); }
+.card-tag.freeze { background: rgba(2,119,189,0.72); }
+
+.card-ov-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-ov-stats {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.card-ov-btns {
+  display: flex;
+  gap: 7px;
+}
+.card-btn-minus,
+.card-btn-plus {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, opacity 0.1s;
+  line-height: 1;
+}
+.card-btn-minus {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.4);
+}
+.card-btn-plus {
+  background: var(--primary-light);
+  color: #fff;
+}
+.card-btn-minus:active,
+.card-btn-plus:active { transform: scale(0.88); opacity: 0.8; }
+
+/* Badge & macro styles — ook gebruikt in detailscherm */
 .badge {
   font-size: 12px;
   font-weight: 600;
@@ -217,11 +287,6 @@ html, body {
 .badge.beide  { background: #FFF3E0;           color: #E65100; }
 .badge.freeze { background: var(--freeze-bg); color: var(--freeze-fg); }
 
-.card-macros {
-  display: flex;
-  gap: 14px;
-  margin-bottom: 12px;
-}
 .macro {
   display: flex;
   align-items: center;
@@ -231,48 +296,6 @@ html, body {
   color: var(--text-mid);
 }
 .macro span { font-size: 15px; }
-
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-}
-
-.counter {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  background: var(--bg);
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1.5px solid var(--border);
-}
-.counter-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary);
-  width: 40px;
-  height: 36px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.1s;
-}
-.counter-btn:active { background: var(--primary-pale); }
-.counter-val {
-  min-width: 28px;
-  text-align: center;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  user-select: none;
-}
-.counter-val.nonzero { color: var(--primary); }
 
 .empty-state {
   text-align: center;
