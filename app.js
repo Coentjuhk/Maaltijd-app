@@ -421,13 +421,71 @@ function loadState() {
 
   try {
     const s = localStorage.getItem('ma_shopping');
-    shoppingList = s ? JSON.parse(s) : [];
+    const raw = s ? JSON.parse(s) : [];
+    // Migreer oude items (naam = ruwe string) naar nieuwe structuur
+    shoppingList = raw.map(item => {
+      if (!('contributions' in item)) {
+        const p = parseIngredient(item.naam || '');
+        const contributions = {};
+        if (item.mealId != null) contributions[String(item.mealId)] = p.qty || 0;
+        return { id: item.id, naam: p.naam, unit: p.unit, qty: p.qty, contributions, afgevinkt: !!item.afgevinkt };
+      }
+      return item;
+    });
   } catch { shoppingList = []; }
 
   try {
     const c = localStorage.getItem('ma_counts');
     counts = c ? JSON.parse(c) : {};
   } catch { counts = {}; }
+}
+
+// ===== INGREDIENT PARSING =====
+function parseIngredient(raw) {
+  const UNITS = new Set(['kg','g','mg','l','ml','dl','el','tl','blik','blikje','blikjes','pak','zakje','stuks']);
+  let s = (raw || '').trim();
+  // Vervang breukgetallen (langste eerst om "2½" vóór "½" te matchen)
+  [['2½','2.5'],['1½','1.5'],['3½','3.5'],['4½','4.5'],
+   ['2¼','2.25'],['1¼','1.25'],['3¼','3.25'],
+   ['2¾','2.75'],['1¾','1.75'],['3¾','3.75'],
+   ['½','0.5'],['¼','0.25'],['¾','0.75'],['⅓','0.33'],['⅔','0.67']
+  ].forEach(([f, v]) => { s = s.split(f).join(v); });
+
+  const m = s.match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
+  if (m) {
+    const qty  = parseFloat(m[1].replace(',', '.'));
+    const rest = m[2].trim();
+    const firstWord = rest.split(/\s+/)[0].toLowerCase().replace(/\.$/, '');
+    if (UNITS.has(firstWord)) {
+      return { qty, unit: firstWord, naam: rest.slice(firstWord.length).trim().toLowerCase() };
+    }
+    return { qty, unit: '', naam: rest.toLowerCase() };
+  }
+  return { qty: null, unit: '', naam: s.toLowerCase() };
+}
+
+function formatItemDisplay(item) {
+  if (item.qty === null || item.qty === undefined) {
+    return item.naam.charAt(0).toUpperCase() + item.naam.slice(1);
+  }
+  const q = item.qty % 1 === 0 ? item.qty : Math.round(item.qty * 10) / 10;
+  return item.unit ? `${q} ${item.unit} ${item.naam}` : `${q} ${item.naam}`;
+}
+
+function mergeOrAddIngredient(raw, mealId) {
+  const p   = parseIngredient(raw);
+  const key = mealId !== null ? String(mealId) : null;
+  const existing = shoppingList.find(x =>
+    !x.afgevinkt && x.naam === p.naam && x.unit === p.unit
+  );
+  if (existing) {
+    if (p.qty !== null && existing.qty !== null) existing.qty += p.qty;
+    if (key) existing.contributions[key] = (existing.contributions[key] || 0) + (p.qty || 0);
+  } else {
+    const contributions = {};
+    if (key) contributions[key] = p.qty || 0;
+    shoppingList.push({ id: Date.now() + Math.random(), naam: p.naam, unit: p.unit, qty: p.qty, contributions, afgevinkt: false });
+  }
 }
 
 // ===== GRADIENT / COLOR HELPERS =====
@@ -616,9 +674,7 @@ function deleteMeal(id) {
 function addIngredientsToShopping(mealId, fromCard = false) {
   const m = meals.find(x => x.id === mealId);
   if (!m || !m.ingredienten) return;
-  m.ingredienten.forEach(naam => {
-    shoppingList.push({ id: Date.now() + Math.random(), naam, afgevinkt: false, mealId });
-  });
+  m.ingredienten.forEach(raw => mergeOrAddIngredient(raw, mealId));
   saveState();
   updateShoppingBadge();
   if (!fromCard) closeDetail();
@@ -626,19 +682,32 @@ function addIngredientsToShopping(mealId, fromCard = false) {
 }
 
 function removeIngredientsFromShopping(mealId) {
-  const before = shoppingList.length;
-  shoppingList = shoppingList.filter(x => x.mealId !== mealId);
-  const removed = before - shoppingList.length;
+  const key = String(mealId);
+  let changed = false;
+  shoppingList = shoppingList.filter(item => {
+    const c = item.contributions || {};
+    if (!(key in c)) return true;
+    const contrib = c[key];
+    delete item.contributions[key];
+    changed = true;
+    if (item.qty !== null) {
+      item.qty = Math.max(0, item.qty - contrib);
+      if (item.qty <= 0) return false;
+    } else if (Object.keys(item.contributions).length === 0) {
+      return false; // geen-hoeveelheid item zonder resterende bijdragen
+    }
+    return true;
+  });
   saveState();
   updateShoppingBadge();
-  showToast(removed > 0 ? `${removed} ingrediënten verwijderd` : 'Geen ingrediënten op de lijst');
+  showToast(changed ? 'Ingrediënten verwijderd' : 'Geen ingrediënten om te verwijderen');
 }
 
 function addShoppingItem() {
   const input = document.getElementById('shopping-input');
-  const naam = input.value.trim();
-  if (!naam) return;
-  shoppingList.push({ id: Date.now() + Math.random(), naam, afgevinkt: false });
+  const raw = input.value.trim();
+  if (!raw) return;
+  mergeOrAddIngredient(raw, null);
   input.value = '';
   saveState();
   renderShopping();
@@ -667,7 +736,7 @@ function clearCheckedItems() {
 function copyShoppingList() {
   const items = shoppingList.filter(x => !x.afgevinkt);
   if (items.length === 0) { showToast('Geen items om te kopiëren'); return; }
-  const text = items.map(x => '• ' + x.naam).join('\n');
+  const text = items.map(x => '• ' + formatItemDisplay(x)).join('\n');
   navigator.clipboard.writeText(text)
     .then(() => showToast('Lijst gekopieerd!'))
     .catch(() => {
@@ -715,7 +784,7 @@ function itemHTML(item) {
     <div class="${checkClass}" onclick="toggleShoppingItem(${item.id})">
       ${item.afgevinkt ? '✓' : ''}
     </div>
-    <span class="item-name">${escapeHTML(item.naam)}</span>
+    <span class="item-name">${escapeHTML(formatItemDisplay(item))}</span>
     <button class="item-del" onclick="deleteShoppingItem(${item.id})">🗑</button>
   </div>`;
 }
