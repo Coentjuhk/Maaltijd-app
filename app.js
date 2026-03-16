@@ -383,6 +383,188 @@ Voeg de kokosmelk toe en roer goed door. Laat 10–15 minuten zachtjes sudderen 
 Serveer met rijst en verdeel over 4 porties.`,
     porties: 4,
     bewaren: "3–4 dagen koelkast | goed invriesbaar"
+  },
+
+  // ===== ONTBIJT =====
+  {
+    id: 12,
+    naam: "Kwark met Muesli & Blauwe Bessen",
+    emoji: "🥣",
+    kleur: "purple",
+    categorie: "ontbijt",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 500,
+    eiwitten: 50,
+    ingredienten: [
+      "500 g magere kwark",
+      "30 g muesli",
+      "100 g blauwe bessen",
+      "10 g lijnzaad"
+    ],
+    bereidingswijze: `Doe de kwark in een kom.
+
+Bestrooi met muesli, lijnzaad en blauwe bessen.
+
+Direct serveren.`,
+    porties: 1
+  },
+  {
+    id: 13,
+    naam: "Ontbijt Shake",
+    emoji: "🥤",
+    kleur: "teal",
+    categorie: "ontbijt",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 180,
+    eiwitten: 30,
+    ingredienten: [
+      "1 scoop eiwitpoeder",
+      "300 ml ongezoete amandelmelk"
+    ],
+    bereidingswijze: `Doe de amandelmelk in een shaker of blender.
+
+Voeg de scoop eiwitpoeder toe en schud of mix goed door.
+
+Direct serveren.`,
+    porties: 1
+  },
+
+  // ===== LUNCH =====
+  {
+    id: 14,
+    naam: "Tosti Kip Kaas",
+    emoji: "🥪",
+    kleur: "orange",
+    categorie: "lunch",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 300,
+    eiwitten: 30,
+    ingredienten: [
+      "2 volkoren boterhammen",
+      "75 g kipfilet (vleeswaren)",
+      "1 plak 30+ kaas",
+      "Klein beetje ketchup"
+    ],
+    bereidingswijze: `Beleg één boterham met ketchup, kipfilet en kaas. Leg de tweede boterham erop.
+
+Bak de tosti in een tosti-ijzer of koekenpan op middelhoog vuur tot de kaas gesmolten is en het brood goudbruin is (±3–4 minuten per kant).
+
+Direct serveren.`,
+    porties: 1
+  },
+  {
+    id: 15,
+    naam: "Kipfilet Wrap",
+    emoji: "🌯",
+    kleur: "green",
+    categorie: "lunch",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 220,
+    eiwitten: 20,
+    ingredienten: [
+      "1 volkoren wrap",
+      "75 g kipfilet (vleeswaren)",
+      "Beetje sla of komkommer (optioneel)",
+      "Klein beetje saus of mosterd (optioneel)"
+    ],
+    bereidingswijze: `Leg de wrap plat.
+
+Beleg met kipfilet en eventueel sla, komkommer en saus.
+
+Rol de wrap strak op en snijd doormidden.`,
+    porties: 1
+  },
+
+  // ===== SNACKS =====
+  {
+    id: 16,
+    naam: "Kwark met Honing",
+    emoji: "🍯",
+    kleur: "orange",
+    categorie: "snack",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 160,
+    eiwitten: 22,
+    ingredienten: [
+      "250 g magere kwark",
+      "1 tl honing"
+    ],
+    bereidingswijze: `Doe de kwark in een kom en druppel de honing erover.`,
+    porties: 1
+  },
+  {
+    id: 17,
+    naam: "Eiwitshake",
+    emoji: "💪",
+    kleur: "blue",
+    categorie: "snack",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 120,
+    eiwitten: 25,
+    ingredienten: [
+      "1 scoop eiwitpoeder",
+      "Water"
+    ],
+    bereidingswijze: `Doe water in een shaker, voeg de scoop eiwitpoeder toe en schud goed.`,
+    porties: 1
+  },
+  {
+    id: 18,
+    naam: "Banaan",
+    emoji: "🍌",
+    kleur: "orange",
+    categorie: "snack",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 100,
+    eiwitten: 1,
+    ingredienten: [
+      "1 banaan"
+    ],
+    bereidingswijze: `Schil de banaan en eet hem zo.`,
+    porties: 1
+  },
+  {
+    id: 19,
+    naam: "Gekookt Ei",
+    emoji: "🥚",
+    kleur: "orange",
+    categorie: "snack",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 70,
+    eiwitten: 6,
+    ingredienten: [
+      "1 ei"
+    ],
+    bereidingswijze: `Breng water aan de kook. Doe het ei voorzichtig in het water.
+
+Kook 8–10 minuten voor hardgekookt.
+
+Koel af onder koud water en pel.`,
+    porties: 1
+  },
+  {
+    id: 20,
+    naam: "Handje Nootjes",
+    emoji: "🥜",
+    kleur: "brown",
+    categorie: "snack",
+    invriesbaar: false,
+    dagtype: "beide",
+    calorieen: 180,
+    eiwitten: 5,
+    ingredienten: [
+      "30 g gemengde noten"
+    ],
+    bereidingswijze: `Weeg 30 g gemengde noten af en eet ze zo.`,
+    porties: 1
   }
 ];
 
