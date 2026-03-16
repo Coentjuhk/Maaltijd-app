@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Maaltijden">
+  <meta name="theme-color" content="#1B5E3B">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <title>MaaltijdApp</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== TABS ===== -->
+    <section id="tab-meals" class="tab active">
+      <header class="app-header">
+        <h1>Maaltijden</h1>
+        <button class="header-btn" id="shopping-btn" onclick="switchTab('shopping')">
+          🛒
+          <span class="cart-badge" id="cart-badge" hidden>0</span>
+        </button>
+      </header>
+
+      <div class="filters-bar" id="filters-bar">
+        <button class="chip" data-filter="invriesbaar">❄️ Invriesbaar</button>
+        <button class="chip" data-filter="sport">🏃 Sportdag</button>
+        <button class="chip" data-filter="rust">😴 Rustdag</button>
+        <button class="chip" data-filter="cal-laag">🔥 &lt;500 kcal</button>
+        <button class="chip" data-filter="cal-hoog">🔥 &gt;700 kcal</button>
+        <button class="chip" data-filter="eiwit-hoog">💪 &gt;40g eiwit</button>
+      </div>
+
+      <div class="meals-list" id="meals-list"></div>
+    </section>
+
+    <section id="tab-shopping" class="tab">
+      <header class="app-header">
+        <h1>Boodschappen</h1>
+        <button class="header-btn" id="copy-btn" onclick="copyShoppingList()" title="Kopieer lijst">📋</button>
+      </header>
+
+      <div class="shopping-add-row">
+        <input id="shopping-input" type="text" placeholder="Item toevoegen…" autocomplete="off">
+        <button class="btn-primary" onclick="addShoppingItem()">+</button>
+      </div>
+
+      <div id="shopping-list"></div>
+
+      <div class="shopping-actions">
+        <button class="btn-ghost danger" onclick="clearCheckedItems()">Verwijder afgevinkte items</button>
+      </div>
+    </section>
+
+    <section id="tab-add" class="tab">
+      <header class="app-header">
+        <h1>Nieuw Gerecht</h1>
+      </header>
+      <form id="add-form" class="add-form" onsubmit="submitMeal(event)">
+        <div class="form-group">
+          <label>Naam *</label>
+          <input type="text" id="f-naam" required placeholder="bijv. Griekse Kip Schaal">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Calorieën *</label>
+            <input type="number" id="f-cal" required min="0" placeholder="650">
+          </div>
+          <div class="form-group">
+            <label>Eiwitten (g) *</label>
+            <input type="number" id="f-eiwit" required min="0" placeholder="48">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Dagtype *</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="dagtype" value="sport" required> 🏃 Sportdag
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="dagtype" value="rust"> 😴 Rustdag
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="dagtype" value="beide"> 📅 Beide
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="f-invries">
+            <span>❄️ Invriesbaar</span>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Emoji / Icoon</label>
+          <input type="text" id="f-emoji" placeholder="🍗" maxlength="4">
+        </div>
+        <div class="form-group">
+          <label>Kaartkleur</label>
+          <div class="color-picker-row">
+            <span class="color-opt active" data-color="green" style="background:linear-gradient(135deg,#1B5E3B,#52B788)"></span>
+            <span class="color-opt" data-color="blue" style="background:linear-gradient(135deg,#1565C0,#42A5F5)"></span>
+            <span class="color-opt" data-color="orange" style="background:linear-gradient(135deg,#E65100,#FFA726)"></span>
+            <span class="color-opt" data-color="purple" style="background:linear-gradient(135deg,#4A148C,#AB47BC)"></span>
+            <span class="color-opt" data-color="teal" style="background:linear-gradient(135deg,#004D40,#26A69A)"></span>
+            <span class="color-opt" data-color="red" style="background:linear-gradient(135deg,#B71C1C,#EF5350)"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Ingrediënten * <small>(één per regel)</small></label>
+          <textarea id="f-ingr" required rows="5" placeholder="300g kipfilet&#10;1 komkommer&#10;200g Griekse yoghurt"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Bereidingswijze *</label>
+          <textarea id="f-bereiding" required rows="6" placeholder="Stap voor stap uitleg…"></textarea>
+        </div>
+        <button type="submit" class="btn-primary full-width">Gerecht opslaan</button>
+      </form>
+    </section>
+
+    <!-- ===== BOTTOM NAV ===== -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-tab="meals" onclick="switchTab('meals')">
+        <span class="nav-icon">🍽️</span>
+        <span class="nav-label">Maaltijden</span>
+      </button>
+      <button class="nav-item" data-tab="shopping" onclick="switchTab('shopping')">
+        <span class="nav-icon">🛒<span class="nav-badge" id="nav-badge" hidden>0</span></span>
+        <span class="nav-label">Boodschappen</span>
+      </button>
+      <button class="nav-item" data-tab="add" onclick="switchTab('add')">
+        <span class="nav-icon">➕</span>
+        <span class="nav-label">Nieuw</span>
+      </button>
+    </nav>
+
+    <!-- ===== DETAIL MODAL ===== -->
+    <div id="detail-modal" class="modal" hidden>
+      <div class="modal-sheet">
+        <div class="modal-drag-handle"></div>
+        <button class="modal-close" onclick="closeDetail()">✕</button>
+        <div id="detail-content"></div>
+      </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="toast" hidden></div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
