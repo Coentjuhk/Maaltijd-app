@@ -137,8 +137,19 @@
     <section id="tab-dagboek" class="tab">
       <header class="app-header">
         <h1>Dagboek</h1>
-        <button class="header-btn" onclick="copyWeekSummary()" title="Weekoverzicht kopiëren">📋</button>
+        <div style="display:flex;gap:4px">
+          <button class="header-btn" id="select-mode-btn" onclick="toggleSelectMode()" title="Selecteer dagen">☑️</button>
+          <button class="header-btn" onclick="copyWeekSummary()" title="Weekoverzicht kopiëren">📋</button>
+        </div>
       </header>
+      <div id="select-bar" class="select-bar" hidden>
+        <span id="select-count" class="select-count">Tik op dagen om te selecteren</span>
+        <div class="select-actions">
+          <button class="select-action-btn" onclick="copySelectedDays()">Kopiëren</button>
+          <button class="select-action-btn" onclick="exportSelectedDays()">Exporteren</button>
+          <button class="select-action-btn select-paste-btn" id="paste-btn" onclick="pasteSelectedDays()" hidden>Plakken</button>
+        </div>
+      </div>
       <div class="week-nav">
         <button class="week-nav-btn" onclick="changeWeek(-1)">‹</button>
         <span class="week-label" id="week-label">laden…</span>
@@ -182,6 +193,36 @@
         <div class="modal-drag-handle"></div>
         <button class="modal-close" onclick="closeDayPicker()">✕</button>
         <div id="daypicker-content"></div>
+      </div>
+    </div>
+
+    <!-- ===== EDIT MEAL MODAL ===== -->
+    <div id="edit-modal" class="modal" hidden>
+      <div class="modal-sheet">
+        <div class="modal-drag-handle"></div>
+        <button class="modal-close" onclick="closeEditMeal()">✕</button>
+        <form id="edit-form" class="edit-form" onsubmit="submitEditMeal(event)">
+          <h2 class="edit-title">Gerecht bewerken</h2>
+          <div class="form-group">
+            <label>Naam *</label>
+            <input type="text" id="e-naam" required placeholder="Naam van het gerecht">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Calorieën *</label>
+              <input type="number" id="e-cal" required min="0">
+            </div>
+            <div class="form-group">
+              <label>Eiwitten (g) *</label>
+              <input type="number" id="e-eiwit" required min="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Ingrediënten <small>(één per regel)</small></label>
+            <textarea id="e-ingr" rows="7" placeholder="300g kipfilet&#10;1 komkommer"></textarea>
+          </div>
+          <button type="submit" class="btn-primary full-width">Opslaan</button>
+        </form>
       </div>
     </div>
 

@@ -1063,6 +1063,136 @@ html, body {
   cursor: pointer;
 }
 
+/* ===== MULTI-SELECT ===== */
+.day-card.day-selected {
+  border-color: var(--primary);
+  background: var(--primary-pale);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+.day-select-check {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+.select-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--primary-pale);
+  border-bottom: 1px solid var(--primary-light);
+  flex-shrink: 0;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.select-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+  flex: 1;
+  min-width: 120px;
+}
+.select-actions {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+.select-action-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 13px;
+  cursor: pointer;
+  min-height: 36px;
+  white-space: nowrap;
+}
+.select-action-btn:active { background: var(--primary-mid); }
+.select-paste-btn { background: #E65100; }
+.select-paste-btn:active { background: #BF360C; }
+
+/* ===== CUSTOM ITEM FORM ===== */
+.dp-custom-form {
+  padding: 14px 20px 16px;
+  border-top: 2px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.dp-custom-form-title {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--primary);
+}
+.dp-custom-form input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 15px;
+  background: var(--card);
+  color: var(--text);
+  outline: none;
+  font-family: inherit;
+}
+.dp-custom-form input:focus { border-color: var(--primary-light); }
+.dp-custom-form-macros {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.dp-custom-submit {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px;
+  cursor: pointer;
+  min-height: 44px;
+}
+.dp-custom-submit:active { background: var(--primary-mid); }
+
+/* ===== DETAIL EDIT BUTTON ===== */
+.detail-edit-btn {
+  width: 100%;
+  background: none;
+  color: var(--primary);
+  border: 1.5px solid var(--primary-light);
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.detail-edit-btn:active { background: var(--primary-pale); }
+
+/* ===== EDIT FORM ===== */
+.edit-form {
+  padding: 16px 20px calc(24px + var(--safe-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+}
+.edit-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+}
+
 /* ===== GRADIENT HELPERS ===== */
 .grad-green  { background: linear-gradient(135deg, #1B5E3B, #52B788); }
 .grad-blue   { background: linear-gradient(135deg, #1565C0, #42A5F5); }

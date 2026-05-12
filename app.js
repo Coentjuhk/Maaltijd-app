@@ -590,6 +590,10 @@ let selectedColor    = 'green';
 let currentDetailId  = null;
 let currentWeekOffset = 0;
 let selectedDayKey   = null;
+let multiSelectMode  = false;
+let selectedDays     = new Set();
+let dayClipboard     = null;
+let editMealId       = null;
 
 const CAT_LABELS = { ontbijt: '🌅 Ontbijt', lunch: '🥗 Lunch', snack: '🍎 Snack', diner: '🍽️ Diner' };
 
@@ -869,6 +873,9 @@ function openDetail(id) {
       <button class="detail-add-btn" onclick="addIngredientsToShopping(${m.id})">
         🛒 Ingrediënten naar boodschappenlijst
       </button>
+      <button class="detail-edit-btn" onclick="openEditMeal(${m.id})">
+        ✏️ Gerecht bewerken
+      </button>
       <button class="detail-delete-btn" onclick="deleteMeal(${m.id})">
         🗑️ Gerecht verwijderen
       </button>
@@ -893,6 +900,44 @@ function deleteMeal(id) {
   closeDetail();
   renderMeals();
   showToast('Gerecht verwijderd');
+}
+
+function openEditMeal(id) {
+  const m = meals.find(x => x.id === id);
+  if (!m) return;
+  editMealId = id;
+  document.getElementById('e-naam').value = m.naam;
+  document.getElementById('e-cal').value = m.calorieen;
+  document.getElementById('e-eiwit').value = m.eiwitten;
+  document.getElementById('e-ingr').value = (m.ingredienten || []).join('\n');
+  document.getElementById('edit-modal').removeAttribute('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditMeal() {
+  document.getElementById('edit-modal').setAttribute('hidden', '');
+  document.body.style.overflow = '';
+  editMealId = null;
+}
+
+function submitEditMeal(e) {
+  e.preventDefault();
+  const m = meals.find(x => x.id === editMealId);
+  if (!m) return;
+  const naam = document.getElementById('e-naam').value.trim();
+  const cal  = parseInt(document.getElementById('e-cal').value, 10);
+  const eiwit = parseInt(document.getElementById('e-eiwit').value, 10);
+  const ingrRaw = document.getElementById('e-ingr').value.trim();
+  if (!naam || isNaN(cal) || isNaN(eiwit)) { showToast('Vul naam, calorieën en eiwitten in'); return; }
+  m.naam = naam;
+  m.calorieen = cal;
+  m.eiwitten = eiwit;
+  if (ingrRaw) m.ingredienten = ingrRaw.split('\n').map(l => l.trim()).filter(Boolean);
+  saveState();
+  renderMeals();
+  closeEditMeal();
+  closeDetail();
+  showToast(`"${naam}" bijgewerkt`);
 }
 
 // ===== SHOPPING LIST =====
@@ -1123,6 +1168,9 @@ function initModalClose() {
   document.getElementById('daypicker-modal').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeDayPicker();
   });
+  document.getElementById('edit-modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeEditMeal();
+  });
 }
 
 // ===== TOAST =====
@@ -1150,6 +1198,20 @@ function dateKey(date) {
   return date.toISOString().slice(0, 10);
 }
 
+function parseCustomItem(entry) {
+  const raw = entry.slice(2);
+  try {
+    const obj = JSON.parse(raw);
+    return { naam: obj.n || '', kcal: obj.k || 0, prot: obj.p || 0, note: obj.note || '' };
+  } catch {
+    return { naam: raw, kcal: 0, prot: 0, note: '' };
+  }
+}
+
+function makeCustomEntry(naam, kcal, prot, note) {
+  return 'c:' + JSON.stringify({ n: naam, k: kcal || 0, p: prot || 0, note: note || '' });
+}
+
 function getWeekDays(offset = 0) {
   const today = new Date();
   const dow = today.getDay();
@@ -1173,8 +1235,14 @@ function formatWeekLabel(from, to) {
 function getDayTotals(key) {
   const ids = dagLog[key] || [];
   return ids.reduce((acc, id) => {
-    const m = meals.find(x => x.id === id);
-    if (m) { acc.cal += m.calorieen || 0; acc.eiwit += m.eiwitten || 0; }
+    if (typeof id === 'number') {
+      const m = meals.find(x => x.id === id);
+      if (m) { acc.cal += m.calorieen || 0; acc.eiwit += m.eiwitten || 0; }
+    } else if (typeof id === 'string' && id.startsWith('c:')) {
+      const item = parseCustomItem(id);
+      acc.cal += item.kcal || 0;
+      acc.eiwit += item.prot || 0;
+    }
     return acc;
   }, { cal: 0, eiwit: 0 });
 }
@@ -1184,10 +1252,17 @@ function renderDagboek() {
   const todayKey = dateKey(new Date());
   document.getElementById('week-label').textContent = formatWeekLabel(days[0], days[6]);
 
+  const selectBtn = document.getElementById('select-mode-btn');
+  if (selectBtn) {
+    selectBtn.textContent = multiSelectMode ? '✕' : '☑️';
+    selectBtn.title = multiSelectMode ? 'Annuleer selectie' : 'Selecteer dagen';
+  }
+
   const list = document.getElementById('dagboek-list');
   list.innerHTML = days.map(date => {
     const key = dateKey(date);
     const isToday = key === todayKey;
+    const isSelected = selectedDays.has(key);
     const totals = getDayTotals(key);
 
     const nameCount = {};
@@ -1195,19 +1270,22 @@ function renderDagboek() {
     (dagLog[key] || []).forEach(id => {
       let naam;
       if (typeof id === 'number') { const m = meals.find(x => x.id === id); naam = m ? m.naam : null; }
-      else if (typeof id === 'string' && id.startsWith('c:')) { naam = id.slice(2); }
+      else if (typeof id === 'string' && id.startsWith('c:')) { naam = parseCustomItem(id).naam; }
       if (!naam) return;
       if (!nameCount[naam]) { nameCount[naam] = 0; nameOrder.push(naam); }
       nameCount[naam]++;
     });
     const chips = nameOrder.length
       ? nameOrder.map(n => `<div class="day-meal-chip">${escapeHTML(n)}${nameCount[n] > 1 ? ` ×${nameCount[n]}` : ''}</div>`).join('')
-      : `<span class="day-empty">Niets gelogd — tik om toe te voegen</span>`;
+      : `<span class="day-empty">Niets gelogd${multiSelectMode ? '' : ' — tik om toe te voegen'}</span>`;
 
-    return `<div class="day-card${isToday ? ' today' : ''}" onclick="openDayPicker('${key}')">
+    const clickFn = multiSelectMode ? `toggleDaySelection('${key}')` : `openDayPicker('${key}')`;
+    return `<div class="day-card${isToday ? ' today' : ''}${isSelected ? ' day-selected' : ''}" onclick="${clickFn}">
       <div class="day-card-head">
         <div class="day-name">${DAG_NL[date.getDay()]} <span class="day-date">${date.getDate()} ${MAAND_NL[date.getMonth()]}</span></div>
-        <div class="day-totals">${totals.cal > 0 ? `🔥 ${totals.cal} · 💪 ${totals.eiwit}g` : '—'}</div>
+        <div class="day-totals">${multiSelectMode
+          ? `<span class="day-select-check">${isSelected ? '✓' : ''}</span>`
+          : (totals.cal > 0 ? `🔥 ${totals.cal} · 💪 ${totals.eiwit}g` : '—')}</div>
       </div>
       <div class="day-meals">${chips}</div>
     </div>`;
@@ -1217,6 +1295,111 @@ function renderDagboek() {
 function changeWeek(delta) {
   currentWeekOffset += delta;
   renderDagboek();
+}
+
+function toggleSelectMode() {
+  multiSelectMode = !multiSelectMode;
+  selectedDays.clear();
+  const bar = document.getElementById('select-bar');
+  if (bar) bar.hidden = !multiSelectMode;
+  updateSelectBar();
+  renderDagboek();
+}
+
+function toggleDaySelection(key) {
+  if (selectedDays.has(key)) {
+    selectedDays.delete(key);
+  } else {
+    selectedDays.add(key);
+  }
+  updateSelectBar();
+  renderDagboek();
+}
+
+function updateSelectBar() {
+  const countEl = document.getElementById('select-count');
+  const pasteBtn = document.getElementById('paste-btn');
+  if (countEl) {
+    const n = selectedDays.size;
+    countEl.textContent = n === 0
+      ? 'Tik op dagen om te selecteren'
+      : `${n} dag${n !== 1 ? 'en' : ''} geselecteerd`;
+  }
+  if (pasteBtn) pasteBtn.hidden = !dayClipboard;
+}
+
+function copySelectedDays() {
+  if (selectedDays.size === 0) { showToast('Selecteer eerst dagen'); return; }
+  dayClipboard = [...selectedDays].sort().map(key => ({
+    key,
+    ids: [...(dagLog[key] || [])]
+  }));
+  const n = dayClipboard.length;
+  showToast(`${n} dag${n !== 1 ? 'en' : ''} gekopieerd — selecteer doeldagen en tik Plakken`);
+  selectedDays.clear();
+  updateSelectBar();
+  renderDagboek();
+}
+
+function pasteSelectedDays() {
+  if (!dayClipboard || dayClipboard.length === 0) { showToast('Niets om te plakken'); return; }
+  if (selectedDays.size === 0) { showToast('Selecteer doeldagen'); return; }
+  const targets = [...selectedDays].sort();
+  targets.forEach((targetKey, i) => {
+    const src = dayClipboard[i % dayClipboard.length];
+    dagLog[targetKey] = [...src.ids];
+  });
+  saveState();
+  const n = targets.length;
+  dayClipboard = null;
+  selectedDays.clear();
+  toggleSelectMode();
+  showToast(`${n} dag${n !== 1 ? 'en' : ''} ingeplakt!`);
+}
+
+function exportSelectedDays() {
+  if (selectedDays.size === 0) { showToast('Selecteer eerst dagen'); return; }
+  const keys = [...selectedDays].sort();
+  const lines = [];
+  let totalCal = 0, totalEiwit = 0;
+  keys.forEach(key => {
+    const date = new Date(key + 'T12:00:00');
+    const totals = getDayTotals(key);
+    lines.push(`${DAG_NL[date.getDay()]} ${date.getDate()} ${MAAND_NL[date.getMonth()]}`);
+    const ids = dagLog[key] || [];
+    if (!ids.length) {
+      lines.push('  Niets gelogd');
+    } else {
+      ids.forEach(id => {
+        if (typeof id === 'number') {
+          const m = meals.find(x => x.id === id);
+          if (m) lines.push(`  • ${m.naam} (🔥 ${m.calorieen} · 💪 ${m.eiwitten}g)`);
+        } else if (typeof id === 'string' && id.startsWith('c:')) {
+          const item = parseCustomItem(id);
+          const macros = item.kcal > 0 ? ` (🔥 ${item.kcal}${item.prot > 0 ? ` · 💪 ${item.prot}g` : ''})` : '';
+          lines.push(`  • ${item.naam}${macros}${item.note ? ` — ${item.note}` : ''}`);
+        }
+      });
+      lines.push(`  Totaal: 🔥 ${totals.cal} kcal · 💪 ${totals.eiwit}g`);
+    }
+    lines.push('');
+    totalCal += totals.cal;
+    totalEiwit += totals.eiwit;
+  });
+  if (keys.length > 1) lines.push(`Totaal ${keys.length} dagen: 🔥 ${totalCal} kcal · 💪 ${totalEiwit}g`);
+  const text = lines.join('\n');
+  if (navigator.share) {
+    navigator.share({ title: 'Maaltijdplan', text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text)
+      .then(() => showToast('Gekopieerd naar klembord!'))
+      .catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta); showToast('Gekopieerd naar klembord!');
+      });
+  }
 }
 
 function openDayPicker(key) {
@@ -1265,19 +1448,31 @@ function renderDayPickerContent(key) {
   if (customEntries.length) {
     html += `<div class="dp-cat-title">Eigen items</div>`;
     customEntries.forEach(({ x, i }) => {
+      const item = parseCustomItem(x);
+      const macroStr = item.kcal > 0 ? `🔥 ${item.kcal} kcal${item.prot > 0 ? ` · 💪 ${item.prot}g` : ''}` : '';
       html += `<div class="dp-meal-row selected">
         <div class="dp-meal-info" style="cursor:default">
-          <span class="dp-meal-name">${escapeHTML(x.slice(2))}</span>
+          <span class="dp-meal-name">${escapeHTML(item.naam)}</span>
+          ${(macroStr || item.note) ? `<span class="dp-meal-macros">${macroStr}${item.note ? (macroStr ? ' · ' : '') + escapeHTML(item.note) : ''}</span>` : ''}
         </div>
-        <button class="dp-counter-btn" onclick="removeDayItem('${key}', ${i})">✕</button>
+        <button class="dp-counter-btn" style="font-size:14px" onclick="removeDayItem('${key}', ${i})">✕</button>
       </div>`;
     });
   }
 
-  html += `<div class="dp-custom-add">
-    <input id="dp-custom-input" type="text" placeholder="Eigen product toevoegen…" autocomplete="off"
+  html += `<div class="dp-custom-form">
+    <div class="dp-custom-form-title">Eigen item toevoegen</div>
+    <input id="dp-custom-naam" type="text" placeholder="Naam (bijv. banaan)" autocomplete="off"
+      onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('dp-custom-kcal').focus();}">
+    <div class="dp-custom-form-macros">
+      <input id="dp-custom-kcal" type="number" placeholder="kcal" min="0"
+        onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('dp-custom-prot').focus();}">
+      <input id="dp-custom-prot" type="number" placeholder="eiwit g" min="0"
+        onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomDayItem('${key}');}">
+    </div>
+    <input id="dp-custom-note" type="text" placeholder="Notitie (optioneel)" autocomplete="off"
       onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomDayItem('${key}');}">
-    <button class="dp-counter-btn dp-counter-add" onclick="addCustomDayItem('${key}')">+</button>
+    <button class="dp-custom-submit" onclick="addCustomDayItem('${key}')">+ Toevoegen</button>
   </div>`;
 
   const totals = getDayTotals(key);
@@ -1316,11 +1511,13 @@ function removeDayItem(key, idx) {
 }
 
 function addCustomDayItem(key) {
-  const input = document.getElementById('dp-custom-input');
-  const val = (input && input.value.trim()) || '';
-  if (!val) return;
+  const naam = (document.getElementById('dp-custom-naam')?.value || '').trim();
+  if (!naam) return;
+  const kcal = Math.round(parseFloat(document.getElementById('dp-custom-kcal')?.value || '0') || 0);
+  const prot = Math.round(parseFloat(document.getElementById('dp-custom-prot')?.value || '0') || 0);
+  const note = (document.getElementById('dp-custom-note')?.value || '').trim();
   if (!dagLog[key]) dagLog[key] = [];
-  dagLog[key].push('c:' + val);
+  dagLog[key].push(makeCustomEntry(naam, kcal, prot, note));
   saveState();
   renderDayPickerContent(key);
 }
@@ -1355,7 +1552,9 @@ function copyWeekSummary() {
         const m = meals.find(x => x.id === id);
         if (m) dayLines.push(`  ${CAT_LABELS[m.categorie || 'diner']} — ${m.naam} (🔥 ${m.calorieen} kcal · 💪 ${m.eiwitten}g eiwit)`);
       } else if (typeof id === 'string' && id.startsWith('c:')) {
-        dayLines.push(`  Eigen item — ${id.slice(2)}`);
+        const ci = parseCustomItem(id);
+        const macros = ci.kcal > 0 ? ` (🔥 ${ci.kcal} kcal${ci.prot > 0 ? ` · 💪 ${ci.prot}g` : ''})` : '';
+        dayLines.push(`  Eigen item — ${ci.naam}${macros}`);
       }
     });
 
