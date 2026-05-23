@@ -1,6 +1,6 @@
-const CACHE = 'maaltijd-v9';
+const CACHE = 'maaltijd-v10';
 const FILES = [
-  './index.html', './styles.css', './app.js', './manifest.json', './icon.svg',
+  './index.html', './styles.css', './app.js', './manifest.json', './icon.svg', './meals.json',
   './images/kip-zoete-aardappel.png',
   './images/zalm-quinoa.png',
   './images/kip-bolognese.png',

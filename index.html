@@ -19,10 +19,13 @@
     <section id="tab-meals" class="tab active">
       <header class="app-header">
         <h1>Maaltijden</h1>
-        <button class="header-btn" id="shopping-btn" onclick="switchTab('shopping')">
-          🛒
-          <span class="cart-badge" id="cart-badge" hidden>0</span>
-        </button>
+        <div style="display:flex;gap:4px">
+          <button class="header-btn" onclick="exportMealsJSON()" title="Download meals.json">⬇️</button>
+          <button class="header-btn" id="shopping-btn" onclick="switchTab('shopping')">
+            🛒
+            <span class="cart-badge" id="cart-badge" hidden>0</span>
+          </button>
+        </div>
       </header>
 
       <div class="filters-bar" id="filters-bar">
