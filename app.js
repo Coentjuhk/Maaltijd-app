@@ -39,7 +39,7 @@ function saveState() {
 }
 
 function loadState(defaultMeals) {
-  const MEALS_VERSION = 2;
+  const MEALS_VERSION = 3;
   const storedVersion = parseInt(localStorage.getItem('ma_meals_version') || '1');
   if (storedVersion < MEALS_VERSION) {
     localStorage.removeItem('ma_meals');
@@ -61,6 +61,14 @@ function loadState(defaultMeals) {
       meals = JSON.parse(JSON.stringify(defaultMeals));
     }
   } catch { meals = JSON.parse(JSON.stringify(defaultMeals)); }
+
+  const VALID_CATS = new Set(['ontbijt', 'lunch', 'snack', 'diner']);
+  meals.forEach(m => {
+    if (!m.categorie || !VALID_CATS.has(m.categorie))
+      console.warn(`Meal id:${m.id} heeft ongeldige categorie: "${m.categorie}"`);
+    if (!m.instructions) m.instructions = [];
+    if (m.notes === undefined) m.notes = '';
+  });
 
   try {
     const s = localStorage.getItem('ma_shopping');
@@ -194,7 +202,29 @@ function renderMeals() {
     return;
   }
 
-  list.innerHTML = visible.map(m => mealCardHTML(m)).join('');
+  const CAT_ORDER = ['ontbijt', 'lunch', 'diner', 'snack'];
+  const catActive = ['cat-ontbijt', 'cat-lunch', 'cat-snack', 'cat-diner']
+    .filter(f => activeFilters.has(f))
+    .map(f => f.replace('cat-', ''));
+  const catsToShow = catActive.length ? catActive : CAT_ORDER;
+
+  const grouped = {};
+  CAT_ORDER.forEach(c => { grouped[c] = []; });
+  visible.forEach(m => {
+    const cat = m.categorie || 'diner';
+    if (grouped[cat]) grouped[cat].push(m);
+  });
+
+  list.innerHTML = catsToShow.map(cat => {
+    const items = grouped[cat] || [];
+    const gridHTML = items.length
+      ? `<div class="cat-grid">${items.map(m => mealCardHTML(m)).join('')}</div>`
+      : `<div class="cat-empty">Geen gerechten</div>`;
+    return `<div class="cat-section">
+      <h2 class="cat-header">${CAT_LABELS[cat] || cat}</h2>
+      ${gridHTML}
+    </div>`;
+  }).join('');
 }
 
 function mealCardHTML(m) {
@@ -296,7 +326,11 @@ function openDetail(id) {
       <ul class="detail-ingr-list">${ingListItems}</ul>
 
       <div class="detail-section-title">Bereidingswijze</div>
-      <p class="detail-bereiding">${escapeHTML(m.bereidingswijze || '—')}</p>
+      ${(m.instructions && m.instructions.length > 0)
+        ? `<ol class="detail-instructions">${m.instructions.map(s => `<li>${escapeHTML(s)}</li>`).join('')}</ol>`
+        : `<p class="detail-bereiding">${escapeHTML(m.bereidingswijze || '—')}</p>`
+      }
+      ${m.notes ? `<div class="detail-notes"><strong>💡 Tip:</strong> ${escapeHTML(m.notes)}</div>` : ''}
 
       <button class="detail-add-btn" onclick="addIngredientsToShopping(${m.id})">
         🛒 Ingrediënten naar boodschappenlijst
@@ -338,8 +372,68 @@ function openEditMeal(id) {
   document.getElementById('e-cal').value = m.calorieen;
   document.getElementById('e-eiwit').value = m.eiwitten;
   document.getElementById('e-ingr').value = (m.ingredienten || []).join('\n');
+  renderInstrEditor(m.instructions || []);
+  document.getElementById('e-notes').value = m.notes || '';
   document.getElementById('edit-modal').removeAttribute('hidden');
   document.body.style.overflow = 'hidden';
+}
+
+function renderInstrEditor(steps) {
+  const container = document.getElementById('instr-editor');
+  container.innerHTML = '';
+  steps.forEach((step, i) => _addInstrRow(container, step, i, steps.length));
+}
+
+function _addInstrRow(container, text, index, total) {
+  const row = document.createElement('div');
+  row.className = 'instr-row';
+  row.innerHTML = `
+    <span class="instr-num">${index + 1}.</span>
+    <input type="text" class="instr-input" value="${escapeAttr(text)}" placeholder="Stap omschrijving…">
+    <button type="button" class="instr-btn" onclick="moveInstrRow(this,-1)" ${index === 0 ? 'disabled' : ''} title="Omhoog">▲</button>
+    <button type="button" class="instr-btn" onclick="moveInstrRow(this,1)" ${index === total - 1 ? 'disabled' : ''} title="Omlaag">▼</button>
+    <button type="button" class="instr-btn instr-del" onclick="deleteInstrRow(this)" title="Verwijder">✕</button>`;
+  container.appendChild(row);
+}
+
+function addInstrStep() {
+  const container = document.getElementById('instr-editor');
+  const rows = container.querySelectorAll('.instr-row');
+  _addInstrRow(container, '', rows.length, rows.length + 1);
+  renumberInstrRows();
+}
+
+function moveInstrRow(btn, dir) {
+  const row = btn.closest('.instr-row');
+  const container = row.parentElement;
+  const rows = Array.from(container.querySelectorAll('.instr-row'));
+  const idx = rows.indexOf(row);
+  const target = rows[idx + dir];
+  if (!target) return;
+  if (dir === -1) container.insertBefore(row, target);
+  else container.insertBefore(target, row);
+  renumberInstrRows();
+}
+
+function deleteInstrRow(btn) {
+  btn.closest('.instr-row').remove();
+  renumberInstrRows();
+}
+
+function renumberInstrRows() {
+  const rows = document.querySelectorAll('#instr-editor .instr-row');
+  const total = rows.length;
+  rows.forEach((row, i) => {
+    row.querySelector('.instr-num').textContent = `${i + 1}.`;
+    const btns = row.querySelectorAll('.instr-btn');
+    btns[0].disabled = (i === 0);
+    btns[1].disabled = (i === total - 1);
+  });
+}
+
+function collectInstrSteps() {
+  return Array.from(document.querySelectorAll('#instr-editor .instr-input'))
+    .map(inp => inp.value.trim()).filter(Boolean);
 }
 
 function closeEditMeal() {
@@ -361,6 +455,8 @@ function submitEditMeal(e) {
   m.calorieen = cal;
   m.eiwitten = eiwit;
   if (ingrRaw) m.ingredienten = ingrRaw.split('\n').map(l => l.trim()).filter(Boolean);
+  m.instructions = collectInstrSteps();
+  m.notes = document.getElementById('e-notes').value.trim();
   saveState();
   renderMeals();
   closeEditMeal();
@@ -556,6 +652,7 @@ function submitMeal(e) {
   }
 
   const ingredienten = ingrRaw.split('\n').map(l => l.trim()).filter(Boolean);
+  const notesVal = document.getElementById('f-notes').value.trim();
   const newId = Date.now();
 
   meals.push({
@@ -569,7 +666,9 @@ function submitMeal(e) {
     calorieen: cal,
     eiwitten: eiwit,
     ingredienten,
-    bereidingswijze: bereiding
+    bereidingswijze: bereiding,
+    instructions: bereiding.split('\n\n').map(s => s.trim()).filter(Boolean),
+    notes: notesVal
   });
 
   saveState();

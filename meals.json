@@ -21,6 +21,17 @@
       "Zout"
     ],
     "bereidingswijze": "Verwarm de oven voor op 200 °C.\n\nSchil de zoete aardappelen en snijd ze in blokjes van ±2–3 cm. Meng met 1½ el olijfolie, peper en zout en verdeel over een bakplaat.\n\nRooster de zoete aardappel 15 minuten in de oven.\n\nSnijd ondertussen de kipfilet in grove stukken en meng met 1 el olijfolie, paprikapoeder, knoflookpoeder, peper en zout.\n\nSnijd de broccoli in kleine roosjes.\n\nHaal de bakplaat uit de oven, voeg kip en broccoli toe en schep alles door elkaar.\n\nZet de bakplaat nog 20 minuten terug in de oven tot alles gaar is.\n\nVerdeel over 4 porties.",
+    "instructions": [
+      "Verwarm de oven voor op 200 °C.",
+      "Schil de zoete aardappelen en snijd ze in blokjes van ±2–3 cm. Meng met 1½ el olijfolie, peper en zout en verdeel over een bakplaat.",
+      "Rooster de zoete aardappel 15 minuten in de oven.",
+      "Snijd ondertussen de kipfilet in grove stukken en meng met 1 el olijfolie, paprikapoeder, knoflookpoeder, peper en zout.",
+      "Snijd de broccoli in kleine roosjes.",
+      "Haal de bakplaat uit de oven, voeg kip en broccoli toe en schep alles door elkaar.",
+      "Zet de bakplaat nog 20 minuten terug in de oven tot alles gaar is.",
+      "Verdeel over 4 porties."
+    ],
+    "notes": "",
     "porties": 4,
     "bewaren": "3–4 dagen koelkast | goed invriesbaar"
   },
@@ -46,6 +57,14 @@
       "Zout"
     ],
     "bereidingswijze": "Verwarm de oven voor op 180 °C.\n\nSnijd de groenten grof en meng met olijfolie, peper en zout. Verdeel over een bakplaat en rooster 20–25 minuten.\n\nSpoel de quinoa goed af en kook volgens de verpakking (±12–15 minuten).\n\nLeg de zalm op bakpapier en besprenkel met citroensap, peper en zout. Bak de zalm 12–15 minuten in de oven.\n\nVerdeel quinoa, groenten en zalm over 2 porties.",
+    "instructions": [
+      "Verwarm de oven voor op 180 °C.",
+      "Snijd de groenten grof en meng met olijfolie, peper en zout. Verdeel over een bakplaat en rooster 20–25 minuten.",
+      "Spoel de quinoa goed af en kook volgens de verpakking (±12–15 minuten).",
+      "Leg de zalm op bakpapier en besprenkel met citroensap, peper en zout. Bak de zalm 12–15 minuten in de oven.",
+      "Verdeel quinoa, groenten en zalm over 2 porties."
+    ],
+    "notes": "",
     "porties": 2,
     "bewaren": "Max. 2 dagen koelkast | liever niet invriezen"
   },
@@ -58,19 +77,30 @@
     "categorie": "diner",
     "invriesbaar": true,
     "dagtype": "sport",
-    "calorieen": 500,
-    "eiwitten": 38,
+    "calorieen": 640,
+    "eiwitten": 46,
     "ingredienten": [
-      "500 g kipgehakt",
-      "250 g volkoren pasta (ongekookt)",
-      "800 g tomatenblokjes (blik)",
-      "2 uien",
-      "4 wortels",
+      "600 g kipgehakt",
+      "300 g volkoren pasta (ongekookt)",
+      "530 g tomatenblokjes",
+      "1 ui",
+      "3 wortels",
+      "1 courgette",
       "Italiaanse kruiden",
       "Peper",
       "Zout"
     ],
-    "bereidingswijze": "Snipper de uien en rasp de wortels.\n\nVerhit een grote pan op middelhoog vuur en bak het kipgehakt rul en goudbruin.\n\nVoeg uien en wortels toe en bak 5 minuten mee.\n\nVoeg tomatenblokjes en Italiaanse kruiden toe. Laat de saus 15–20 minuten zachtjes pruttelen op laag vuur.\n\nKook ondertussen de pasta volgens de verpakking.\n\nMeng pasta en saus of bewaar apart voor meal prep.\n\nVerdeel over 4 maaltijden.",
+    "bereidingswijze": "Snipper de ui fijn en rasp of snijd de wortels klein. Hoe fijner de wortel, hoe meer hij wegsmelt in de saus. Snijd de courgette in kleine blokjes.\n\nVerhit een pan met een klein beetje olie en fruit de ui 2-3 min glazig op middelhoog vuur.\n\nVoeg het kipgehakt toe en bak het rul in 5-6 min, druk de klontjes uit elkaar met een spatel.\n\nDoe de wortel en courgette erbij en bak 3-4 min mee tot ze zachter worden.\n\nSchenk de tomatenblokjes erbij, voeg Italiaanse kruiden, peper en zout toe. Laat 15-20 min zachtjes pruttelen tot de saus indikt.\n\nKook ondertussen de volkoren pasta beetgaar volgens de verpakking. Giet af.\n\nMeng de pasta door de saus of houd apart. Verdeel over 4 bakjes en laat afkoelen.",
+    "instructions": [
+      "Snipper de ui fijn en rasp of snijd de wortels klein. Hoe fijner de wortel, hoe meer hij wegsmelt in de saus. Snijd de courgette in kleine blokjes.",
+      "Verhit een pan met een klein beetje olie en fruit de ui 2-3 min glazig op middelhoog vuur.",
+      "Voeg het kipgehakt toe en bak het rul in 5-6 min, druk de klontjes uit elkaar met een spatel.",
+      "Doe de wortel en courgette erbij en bak 3-4 min mee tot ze zachter worden.",
+      "Schenk de tomatenblokjes erbij, voeg Italiaanse kruiden, peper en zout toe. Laat 15-20 min zachtjes pruttelen tot de saus indikt.",
+      "Kook ondertussen de volkoren pasta beetgaar volgens de verpakking. Giet af.",
+      "Meng de pasta door de saus of houd apart. Verdeel over 4 bakjes en laat afkoelen."
+    ],
+    "notes": "Voor invriezen: saus en pasta apart invriezen houdt de pasta het lekkerst. Samen kan ook, accepteer dan dat de pasta iets zachter wordt.",
     "porties": 4,
     "bewaren": "4 dagen koelkast | zeer goed invriesbaar"
   },
@@ -81,23 +111,30 @@
     "kleur": "blue",
     "afbeelding": "./images/griekse-kip-couscous.png",
     "categorie": "diner",
-    "invriesbaar": false,
+    "invriesbaar": true,
     "dagtype": "rust",
-    "calorieen": 495,
-    "eiwitten": 41,
+    "calorieen": 615,
+    "eiwitten": 46,
     "ingredienten": [
-      "500 g kipfilet",
-      "250 g volkoren couscous",
-      "350 g paprika",
-      "350 g courgette",
-      "300 g rode ui",
+      "600 g kipfilet",
+      "300 g volkoren couscous",
+      "700 g paprika, courgette en rode ui",
       "2 el olijfolie",
       "Citroensap",
       "Oregano",
       "Peper",
       "Zout"
     ],
-    "bereidingswijze": "Verwarm de oven voor op 200 °C.\n\nSnijd de kipfilet in stukken en meng met olijfolie, citroensap, oregano, peper en zout.\n\nSnijd de groenten grof en verdeel over een bakplaat. Rooster de groenten 20–25 minuten.\n\nBak de kip in een pan 6–8 minuten tot gaar.\n\nBereid de couscous met heet water volgens de verpakking (laat 5 minuten staan, roer daarna los met een vork).\n\nMeng couscous, kip en groenten. Verdeel over 4 porties.",
+    "bereidingswijze": "Verwarm de oven voor op 200°C. Snijd paprika, courgette en rode ui in grove stukken.\n\nVerdeel de groenten over een bakplaat, besprenkel met 1 el olijfolie, oregano, peper en zout. Rooster 20-25 min tot ze zacht en licht gekleurd zijn.\n\nSnijd de kipfilet in blokjes of reepjes. Bak in een pan met 1 el olijfolie in 6-7 min gaar, kruid met oregano, peper en zout.\n\nBereid de couscous: overgiet met evenveel kokend water (of bouillon), dek af en laat 5 min wellen. Losmaken met een vork.\n\nMeng de couscous met de geroosterde groenten en een flinke scheut citroensap.\n\nVerdeel de couscous-groentemix met de kip over 4 bakjes en laat afkoelen.",
+    "instructions": [
+      "Verwarm de oven voor op 200°C. Snijd paprika, courgette en rode ui in grove stukken.",
+      "Verdeel de groenten over een bakplaat, besprenkel met 1 el olijfolie, oregano, peper en zout. Rooster 20-25 min tot ze zacht en licht gekleurd zijn.",
+      "Snijd de kipfilet in blokjes of reepjes. Bak in een pan met 1 el olijfolie in 6-7 min gaar, kruid met oregano, peper en zout.",
+      "Bereid de couscous: overgiet met evenveel kokend water (of bouillon), dek af en laat 5 min wellen. Losmaken met een vork.",
+      "Meng de couscous met de geroosterde groenten en een flinke scheut citroensap.",
+      "Verdeel de couscous-groentemix met de kip over 4 bakjes en laat afkoelen."
+    ],
+    "notes": "Matig invriesbaar: de couscous wordt na ontdooien iets droger. Eet bij voorkeur vers, of vries maximaal 1 portie in als achtervang.",
     "porties": 4,
     "bewaren": "3–4 dagen koelkast | matig invriesbaar"
   },
@@ -120,6 +157,15 @@
       "1 el sesamolie"
     ],
     "bereidingswijze": "Kook de zilvervliesrijst volgens de verpakking.\n\nSnijd de tofu in blokjes en dep droog met keukenpapier (dit zorgt voor een knapperige korst).\n\nVerhit de sesamolie in een wok of koekenpan op hoog vuur en bak de tofu goudbruin, ±5–7 minuten.\n\nVoeg de groenten toe en roerbak 5–7 minuten tot gaar maar nog knapperig.\n\nVoeg sojasaus toe en meng goed.\n\nMeng met de rijst en verdeel over 2 porties.",
+    "instructions": [
+      "Kook de zilvervliesrijst volgens de verpakking.",
+      "Snijd de tofu in blokjes en dep droog met keukenpapier (dit zorgt voor een knapperige korst).",
+      "Verhit de sesamolie in een wok of koekenpan op hoog vuur en bak de tofu goudbruin, ±5–7 minuten.",
+      "Voeg de groenten toe en roerbak 5–7 minuten tot gaar maar nog knapperig.",
+      "Voeg sojasaus toe en meng goed.",
+      "Meng met de rijst en verdeel over 2 porties."
+    ],
+    "notes": "",
     "porties": 2,
     "bewaren": "3 dagen koelkast | niet ideaal invriezen"
   },
@@ -132,12 +178,12 @@
     "categorie": "diner",
     "invriesbaar": true,
     "dagtype": "rust",
-    "calorieen": 515,
-    "eiwitten": 33,
+    "calorieen": 560,
+    "eiwitten": 36,
     "ingredienten": [
-      "500 g mager rundergehakt",
-      "225 g zilvervliesrijst",
-      "10 paprika's (gemengd)",
+      "600 g mager rundergehakt",
+      "300 g zilvervliesrijst (ongekookt)",
+      "6 paprika's",
       "2 uien",
       "1 el olijfolie",
       "Paprikapoeder",
@@ -145,7 +191,17 @@
       "Peper",
       "Zout"
     ],
-    "bereidingswijze": "Kook de rijst volgens de verpakking.\n\nSnipper de uien en snijd de paprika's in reepjes.\n\nVerhit een pan met olijfolie op middelhoog vuur en bak de uien 2–3 minuten tot glazig.\n\nVoeg het rundergehakt toe en bak rul en bruin.\n\nVoeg paprika's, paprikapoeder en komijn toe en bak 7 minuten mee.\n\nBreng op smaak met peper en zout.\n\nVerdeel samen met rijst over 4 porties.",
+    "bereidingswijze": "Kook de rijst volgens de verpakking.\n\nSnipper de uien en snijd de paprika's in stukken.\n\nVerhit de olijfolie in een ruime pan en fruit de ui 2-3 min glazig.\n\nVoeg het rundergehakt toe en bak rul in 6-7 min op middelhoog tot hoog vuur.\n\nDoe de paprika erbij, samen met paprikapoeder en komijn. Bak 6-8 min tot de paprika zacht is.\n\nBreng op smaak met peper en zout. Meng de rijst erdoor of verdeel apart.\n\nVerdeel over 4 bakjes en laat afkoelen voor je sluit.",
+    "instructions": [
+      "Kook de rijst volgens de verpakking.",
+      "Snipper de uien en snijd de paprika's in stukken.",
+      "Verhit de olijfolie in een ruime pan en fruit de ui 2-3 min glazig.",
+      "Voeg het rundergehakt toe en bak rul in 6-7 min op middelhoog tot hoog vuur.",
+      "Doe de paprika erbij, samen met paprikapoeder en komijn. Bak 6-8 min tot de paprika zacht is.",
+      "Breng op smaak met peper en zout. Meng de rijst erdoor of verdeel apart.",
+      "Verdeel over 4 bakjes en laat afkoelen voor je sluit."
+    ],
+    "notes": "Mager gehakt (5%) houdt de calorieën laag. Vetter gehakt kan zomaar 150 kcal per portie extra betekenen.",
     "porties": 4,
     "bewaren": "4 dagen koelkast | goed invriesbaar"
   },
@@ -158,18 +214,28 @@
     "categorie": "diner",
     "invriesbaar": false,
     "dagtype": "sport",
-    "calorieen": 555,
-    "eiwitten": 44,
+    "calorieen": 490,
+    "eiwitten": 38,
     "ingredienten": [
       "300 g kipfilet",
-      "120 g rijstnoedels",
-      "700 g roerbakgroenten",
+      "130 g rijstnoedels",
+      "500 g roerbakgroenten",
       "2 el sojasaus",
       "1 el sesamolie",
       "1 teentje knoflook (optioneel)",
       "Stukje gember (optioneel)"
     ],
     "bereidingswijze": "Bereid de rijstnoedels volgens de verpakking (week of kook kort).\n\nSnijd de kipfilet in dunne reepjes.\n\nVerhit de olie in een wok op hoog vuur en bak de kip 4–5 minuten gaar.\n\nVoeg knoflook, gember en de groenten toe. Roerbak 5–7 minuten op hoog vuur.\n\nVoeg noedels en sojasaus toe en meng alles goed door.\n\nVerdeel over 2 porties.",
+    "instructions": [
+      "Week de rijstnoedels volgens de verpakking (meestal 5-8 min in heet water). Giet af en spoel koud zodra ze beetgaar zijn, anders plakken ze.",
+      "Snijd de kip in reepjes. Snijd knoflook en gember fijn als je ze gebruikt.",
+      "Verhit de sesamolie in een wok op hoog vuur. Bak de kip 5-6 min tot gaar en laat hem even kleuren.",
+      "Voeg knoflook en gember toe, bak 30 sec mee tot het geurt.",
+      "Doe de roerbakgroenten erbij en roerbak 3-4 min op hoog vuur — kort en heet houdt ze knapperig.",
+      "Schep de noedels en sojasaus erdoor, bak 1-2 min al omscheppend tot alles warm en gemengd is.",
+      "Verdeel over 2 bakjes. Eet binnen 2 dagen."
+    ],
+    "notes": "Niet invriezen — rijstnoedels worden papperig na ontdooien. Dit is je 'verse' optie voor begin van de week.",
     "porties": 2,
     "bewaren": "2–3 dagen koelkast | niet invriezen"
   },
@@ -182,15 +248,24 @@
     "categorie": "diner",
     "invriesbaar": true,
     "dagtype": "sport",
-    "calorieen": 540,
-    "eiwitten": 50,
+    "calorieen": 505,
+    "eiwitten": 45,
     "ingredienten": [
       "600 g kipfilet",
-      "250 g zilvervliesrijst",
-      "1600 g broccoli",
+      "300 g zilvervliesrijst (ongekookt)",
+      "1000 g broccoli",
       "4 el teriyakisaus (light)"
     ],
     "bereidingswijze": "Kook de rijst volgens de verpakking.\n\nSnijd de kipfilet in blokjes.\n\nVerhit een koekenpan op middelhoog vuur en bak de kip goudbruin, ±6–8 minuten.\n\nVoeg de teriyakisaus toe en laat 2–3 minuten karamelliseren terwijl je blijft roeren.\n\nKook of stoom de broccoli 4–5 minuten tot beetgaar.\n\nMeng alles en verdeel over 4 porties.",
+    "instructions": [
+      "Kook de rijst volgens de verpakking. Begin hiermee, dan loopt de rest gelijk mee.",
+      "Snijd de broccoli in roosjes. Stoom of kook ze 4-5 min tot net beetgaar — niet te lang, dan blijven ze stevig na het opwarmen.",
+      "Snijd de kip in blokjes en bak in een wok met een klein beetje olie op middelhoog tot hoog vuur in 5-6 min gaar.",
+      "Voeg de teriyakisaus toe en roerbak 1-2 min tot de kip mooi glazig is en de saus iets karamelliseert.",
+      "Schep de broccoli erdoor zodat hij de saus opneemt. Even kort meebakken is genoeg.",
+      "Verdeel rijst, kip en broccoli over 4 bakjes. Laat afkoelen voor je sluit."
+    ],
+    "notes": "Broccoli net beetgaar houden — na opwarmen wordt hij toch zachter. Te gaar koken = papperig na het invriezen.",
     "porties": 4,
     "bewaren": "3–4 dagen koelkast | goed invriesbaar"
   },
@@ -203,50 +278,33 @@
     "categorie": "diner",
     "invriesbaar": true,
     "dagtype": "beide",
-    "calorieen": 570,
-    "eiwitten": 39,
+    "calorieen": 575,
+    "eiwitten": 40,
     "ingredienten": [
-      "500 g mager rundergehakt",
-      "250 g zilvervliesrijst",
-      "1 blik kidneybonen (240 g, uitgelekt)",
-      "2 blik tomatenblokjes",
+      "600 g mager rundergehakt",
+      "300 g zilvervliesrijst (ongekookt)",
+      "1 blik kidneybonen (uitgelekt, ~240 g)",
+      "1 blik mais (uitgelekt, ~140 g)",
+      "1 blik tomatenblokjes",
       "4 paprika's",
-      "2 uien",
+      "1 ui",
       "2 teentjes knoflook",
       "Chilipoeder",
       "Komijn"
     ],
-    "bereidingswijze": "Kook de rijst volgens de verpakking.\n\nSnipper de uien en knoflook. Snijd de paprika's in blokjes.\n\nBak uien en knoflook 2–3 minuten in een pan tot glazig.\n\nVoeg het rundergehakt toe en bak rul en bruin.\n\nVoeg paprika's toe en bak 3 minuten mee.\n\nVoeg tomatenblokjes, kidneybonen, chilipoeder en komijn toe. Breng op smaak met peper en zout.\n\nLaat de chili 15–20 minuten sudderen op laag vuur.\n\nVerdeel samen met rijst over 4 porties.",
+    "bereidingswijze": "Kook de rijst volgens de verpakking.\n\nSnipper de ui en knoflook. Snijd de paprika's in blokjes.\n\nBak uien en knoflook 2–3 minuten in een pan tot glazig.\n\nVoeg het rundergehakt toe en bak rul en bruin.\n\nVoeg paprika's toe en bak 3 minuten mee.\n\nVoeg tomatenblokjes, kidneybonen, chilipoeder en komijn toe. Breng op smaak met peper en zout.\n\nLaat de chili 15–20 minuten sudderen op laag vuur.\n\nVerdeel samen met rijst over 4 porties.",
+    "instructions": [
+      "Kook de rijst volgens de verpakking.",
+      "Snipper ui en knoflook, snijd de paprika in blokjes.",
+      "Verhit een ruime pan met een klein beetje olie en fruit ui en knoflook 2-3 min glazig.",
+      "Voeg het gehakt toe en bak rul in 6-7 min op middelhoog tot hoog vuur.",
+      "Doe paprika, chilipoeder en komijn erbij, bak 3-4 min mee. Doseer het chilipoeder naar je eigen voorkeur.",
+      "Schenk de tomatenblokjes en de uitgelekte kidneybonen en mais erbij. Laat 15-20 min zachtjes pruttelen tot het indikt.",
+      "Breng op smaak met peper en zout. Verdeel met de rijst over 4 bakjes en laat afkoelen."
+    ],
+    "notes": "Chili wordt de volgende dag alleen maar lekkerder — de smaken trekken goed in. Een topper om in te vriezen.",
     "porties": 4,
     "bewaren": "4 dagen koelkast | zeer goed invriesbaar"
-  },
-  {
-    "id": 11,
-    "naam": "Turkse Gehakt Schotel met Aardappel",
-    "emoji": "🥘",
-    "kleur": "brown",
-    "afbeelding": "./images/turkse-gehakt-schotel.png",
-    "categorie": "diner",
-    "invriesbaar": true,
-    "dagtype": "rust",
-    "calorieen": 535,
-    "eiwitten": 39,
-    "ingredienten": [
-      "600 g mager rundergehakt",
-      "800 g / 6 aardappelen",
-      "8 paprika's",
-      "2 grote uien",
-      "800 g tomatenblokjes (blik)",
-      "2 teentjes knoflook",
-      "Paprikapoeder",
-      "Komijn",
-      "Olijfolie",
-      "Peper",
-      "Zout"
-    ],
-    "bereidingswijze": "Verwarm de oven voor op 200 °C.\n\nSchil de aardappelen en snijd ze in blokjes van ±2 cm. Meng met olijfolie, peper en zout en verdeel over een bakplaat. Rooster 20 minuten.\n\nBak het rundergehakt rul en bruin in een grote pan.\n\nSnipper de uien en knoflook, snijd de paprika's in reepjes. Voeg toe aan het gehakt en bak 5 minuten mee.\n\nVoeg tomatenblokjes, paprikapoeder en komijn toe. Laat 10 minuten sudderen op laag vuur.\n\nMeng met de geroosterde aardappelen of serveer apart.\n\nVerdeel over 4 porties.",
-    "porties": 4,
-    "bewaren": "4 dagen koelkast | goed invriesbaar"
   },
   {
     "id": 10,
@@ -257,18 +315,64 @@
     "categorie": "diner",
     "invriesbaar": true,
     "dagtype": "sport",
-    "calorieen": 520,
-    "eiwitten": 46,
+    "calorieen": 535,
+    "eiwitten": 40,
     "ingredienten": [
       "600 g kipfilet",
-      "250 g zilvervliesrijst",
-      "1200 g roerbakgroenten",
-      "200 ml lichte kokosmelk",
+      "300 g zilvervliesrijst (ongekookt)",
+      "800 g roerbakgroenten",
+      "400 ml lichte kokosmelk",
       "2 el currypasta"
     ],
     "bereidingswijze": "Kook de rijst volgens de verpakking.\n\nSnijd de kipfilet in blokjes.\n\nVerhit een pan op middelhoog vuur en bak de kip 5 minuten aan alle kanten bruin.\n\nVoeg de currypasta toe en bak 1 minuut mee.\n\nVoeg de groenten toe en bak 3 minuten mee.\n\nVoeg de kokosmelk toe en roer goed door. Laat 10–15 minuten zachtjes sudderen tot de saus indikt.\n\nServeer met rijst en verdeel over 4 porties.",
+    "instructions": [
+      "Zet de rijst op volgens de verpakking (zilvervliesrijst kookt ~20-25 min). Spoel hem vooraf kort af tot het water helder is, dat voorkomt plakken.",
+      "Snijd de kipfilet in blokjes van ~2 cm. Verhit een ruime pan of wok met een klein beetje olie op middelhoog vuur.",
+      "Bak de kip in 5-6 min rondom gaar en lichtbruin. Haal de kip eventueel even uit de pan zodat hij niet uitdroogt.",
+      "Voeg de currypasta toe aan de pan en bak 1 min mee tot het geurt. Zo komen de smaken los.",
+      "Doe de roerbakgroenten erbij en roerbak 3-4 min tot ze beetgaar zijn.",
+      "Schenk de kokosmelk erbij, doe de kip terug, en laat 5 min zachtjes pruttelen tot de saus iets indikt. Breng op smaak met peper en zout.",
+      "Verdeel met de rijst over 4 bakjes. Laat afkoelen voor je ze sluit en in de koelkast of vriezer zet."
+    ],
+    "notes": "Invriezen: rijst en saus vriezen prima samen in. Ontdooi een nacht in de koelkast of verwarm direct in de magnetron met een scheutje water erbij.",
     "porties": 4,
     "bewaren": "3–4 dagen koelkast | goed invriesbaar"
+  },
+  {
+    "id": 11,
+    "naam": "Turkse Gehakt Schotel met Aardappel",
+    "emoji": "🥘",
+    "kleur": "brown",
+    "afbeelding": "./images/turkse-gehakt-schotel.png",
+    "categorie": "diner",
+    "invriesbaar": true,
+    "dagtype": "rust",
+    "calorieen": 430,
+    "eiwitten": 34,
+    "ingredienten": [
+      "600 g mager rundergehakt",
+      "800 g aardappelen",
+      "5 paprika's",
+      "1 grote ui",
+      "400 g tomatenblokjes (blik)",
+      "2 teentjes knoflook",
+      "Paprikapoeder",
+      "Komijn",
+      "Olijfolie"
+    ],
+    "bereidingswijze": "Verwarm de oven voor op 200 °C.\n\nSchil de aardappelen en snijd ze in blokjes van ±2 cm. Meng met olijfolie, peper en zout en verdeel over een bakplaat. Rooster 20 minuten.\n\nBak het rundergehakt rul en bruin in een grote pan.\n\nSnipper de uien en knoflook, snijd de paprika's in reepjes. Voeg toe aan het gehakt en bak 5 minuten mee.\n\nVoeg tomatenblokjes, paprikapoeder en komijn toe. Laat 10 minuten sudderen op laag vuur.\n\nMeng met de geroosterde aardappelen of serveer apart.\n\nVerdeel over 4 porties.",
+    "instructions": [
+      "Verwarm de oven voor op 200°C. Schil de aardappelen en snijd ze in blokjes van ~2 cm.",
+      "Kook de aardappelblokjes 8 min voor in kokend water, giet af. Zo worden ze in de oven mooi gaar van binnen.",
+      "Snipper ui en knoflook, snijd de paprika in stukken.",
+      "Verhit een koekenpan met olijfolie, fruit ui en knoflook 2-3 min, voeg het gehakt toe en bak rul in 6-7 min.",
+      "Voeg paprika, paprikapoeder en komijn toe, bak 4-5 min mee. Schenk de tomatenblokjes erbij en laat 5 min pruttelen.",
+      "Meng de voorgekookte aardappel met het gehaktmengsel in een ovenschaal. Besprenkel met wat olijfolie.",
+      "Bak 20-25 min in de oven tot de aardappelen goudbruin en gaar zijn. Verdeel over 4 bakjes en laat afkoelen."
+    ],
+    "notes": "De ovenstap geeft smaak en textuur, maar als je tijd wilt sparen kun je alles ook in de pan afmaken — gewoon de aardappel langer mee laten garen.",
+    "porties": 4,
+    "bewaren": "4 dagen koelkast | goed invriesbaar"
   },
   {
     "id": 12,
@@ -288,6 +392,12 @@
       "10 g lijnzaad"
     ],
     "bereidingswijze": "Doe de kwark in een kom.\n\nBestrooi met muesli, lijnzaad en blauwe bessen.\n\nDirect serveren.",
+    "instructions": [
+      "Doe de kwark in een kom.",
+      "Bestrooi met muesli, lijnzaad en blauwe bessen.",
+      "Direct serveren."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -306,6 +416,12 @@
       "300 ml ongezoete amandelmelk"
     ],
     "bereidingswijze": "Doe de amandelmelk in een shaker of blender.\n\nVoeg de scoop eiwitpoeder toe en schud of mix goed door.\n\nDirect serveren.",
+    "instructions": [
+      "Doe de amandelmelk in een shaker of blender.",
+      "Voeg de scoop eiwitpoeder toe en schud of mix goed door.",
+      "Direct serveren."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -326,6 +442,12 @@
       "Klein beetje ketchup"
     ],
     "bereidingswijze": "Beleg één boterham met ketchup, kipfilet en kaas. Leg de tweede boterham erop.\n\nBak de tosti in een tosti-ijzer of koekenpan op middelhoog vuur tot de kaas gesmolten is en het brood goudbruin is (±3–4 minuten per kant).\n\nDirect serveren.",
+    "instructions": [
+      "Beleg één boterham met ketchup, kipfilet en kaas. Leg de tweede boterham erop.",
+      "Bak de tosti in een tosti-ijzer of koekenpan op middelhoog vuur tot de kaas gesmolten is en het brood goudbruin is (±3–4 minuten per kant).",
+      "Direct serveren."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -346,6 +468,12 @@
       "Klein beetje saus of mosterd (optioneel)"
     ],
     "bereidingswijze": "Leg de wrap plat.\n\nBeleg met kipfilet en eventueel sla, komkommer en saus.\n\nRol de wrap strak op en snijd doormidden.",
+    "instructions": [
+      "Leg de wrap plat.",
+      "Beleg met kipfilet en eventueel sla, komkommer en saus.",
+      "Rol de wrap strak op en snijd doormidden."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -364,6 +492,10 @@
       "1 scoop flavorpoeder"
     ],
     "bereidingswijze": "Doe de kwark in een kom en meng er de scoop flavorpoeder door tot een gladde, smeuïge massa.",
+    "instructions": [
+      "Doe de kwark in een kom en meng er de scoop flavorpoeder door tot een gladde, smeuïge massa."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -382,6 +514,10 @@
       "Water"
     ],
     "bereidingswijze": "Doe water in een shaker, voeg de scoop eiwitpoeder toe en schud goed.",
+    "instructions": [
+      "Doe water in een shaker, voeg de scoop eiwitpoeder toe en schud goed."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -399,6 +535,10 @@
       "1 banaan"
     ],
     "bereidingswijze": "Schil de banaan en eet hem zo.",
+    "instructions": [
+      "Schil de banaan en eet hem zo."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -416,6 +556,12 @@
       "1 ei"
     ],
     "bereidingswijze": "Breng water aan de kook. Doe het ei voorzichtig in het water.\n\nKook 8–10 minuten voor hardgekookt.\n\nKoel af onder koud water en pel.",
+    "instructions": [
+      "Breng water aan de kook. Doe het ei voorzichtig in het water.",
+      "Kook 8–10 minuten voor hardgekookt.",
+      "Koel af onder koud water en pel."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -433,6 +579,10 @@
       "30 g gemengde noten"
     ],
     "bereidingswijze": "Weeg 30 g gemengde noten af en eet ze zo.",
+    "instructions": [
+      "Weeg 30 g gemengde noten af en eet ze zo."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -450,6 +600,10 @@
       "75 g kipfilet (vleeswaren)"
     ],
     "bereidingswijze": "Beleg de rijstwafels met kipfilet. Direct serveren.",
+    "instructions": [
+      "Beleg de rijstwafels met kipfilet. Direct serveren."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -466,6 +620,10 @@
       "1 scoop flavorpoeder (3 g)"
     ],
     "bereidingswijze": "Meng door yoghurt, kwark, oats of shake voor extra smaak.",
+    "instructions": [
+      "Meng door yoghurt, kwark, oats of shake voor extra smaak."
+    ],
+    "notes": "",
     "porties": 1
   },
   {
@@ -482,6 +640,41 @@
       "1 tl sambal (~10 g)"
     ],
     "bereidingswijze": "Voeg toe aan rijst, noedels, gehakt of saus voor extra pit.",
+    "instructions": [
+      "Voeg toe aan rijst, noedels, gehakt of saus voor extra pit."
+    ],
+    "notes": "",
     "porties": 1
+  },
+  {
+    "id": 24,
+    "naam": "Air Fryer Kipbites",
+    "emoji": "🍗",
+    "kleur": "orange",
+    "categorie": "snack",
+    "invriesbaar": true,
+    "dagtype": "sport",
+    "calorieen": 265,
+    "eiwitten": 46,
+    "ingredienten": [
+      "600 g kipfilet",
+      "2 eieren",
+      "30 g paneermeel",
+      "1½ tl paprikapoeder",
+      "¾ tl knoflookpoeder",
+      "¾ tl zout",
+      "½ tl zwarte peper"
+    ],
+    "bereidingswijze": "Snijd de kipfilet in gelijkmatige blokjes van ~2-3 cm.\n\nMeng het paneermeel met paprikapoeder, knoflookpoeder, zout en peper in een kom.\n\nKlop de eieren los in een aparte kom. Haal de kipblokjes eerst door het ei, daarna door het paneermengsel.\n\nLeg de kip in één laag in de air fryer. Bak 12-15 min op 200°C, halverwege schudden, tot goudbruin en gaar.\n\nLaat afkoelen en bewaar in een afgesloten bak. Houdbaar 3-4 dagen.",
+    "instructions": [
+      "Snijd de kipfilet in gelijkmatige blokjes van ~2-3 cm. Gelijke grootte zorgt voor gelijkmatig garen.",
+      "Meng het paneermeel met paprikapoeder, knoflookpoeder, zout en peper in een kom of diep bord.",
+      "Klop de eieren los in een aparte kom. Haal de kipblokjes eerst door het ei, daarna door het kruiden-paneermengsel. Een dun laagje is genoeg voor de crunch.",
+      "Leg de kip in één laag in de air fryer (in batches als nodig). Bak 12-15 min op 200°C, halverwege schudden, tot goudbruin en gaar.",
+      "Laat afkoelen en bewaar in een afgesloten bak in de koelkast. Opwarmen kan kort in de air fryer voor de crunch. Houdbaar 3-4 dagen."
+    ],
+    "notes": "Hartige achtervang voor de avonden dat de trek toeslaat. Dip van magere kwark + sriracha of mosterd = bijna 0 kcal extra. Blijf bij kipfilet (geen dij/vel) en houd het paneerlaagje dun — dat is de stille calorie-toevoeging. Als extra bovenop je dagschema telt het mee: prima op een sportdag, terughoudender op een rustdag.",
+    "porties": 3,
+    "bewaren": "3–4 dagen koelkast | goed invriesbaar"
   }
 ]
