@@ -16,8 +16,16 @@ let multiSelectMode  = false;
 let selectedDays     = new Set();
 let dayClipboard     = null;
 let editMealId       = null;
+let wellbeing        = {};
+let currentWellbeingKey = null;
+let wellbeingDraft   = {};
 
 const CAT_LABELS = { ontbijt: '🌅 Ontbijt', lunch: '🥗 Lunch', snack: '🍎 Snack', diner: '🍽️ Diner' };
+const WELLBEING_CATS = [
+  { key: 'energie', label: 'Energie', emoji: '⚡', higherIsBetter: true },
+  { key: 'slaap',   label: 'Slaap',   emoji: '😴', higherIsBetter: true },
+  { key: 'stress',  label: 'Stress',  emoji: '😰', higherIsBetter: false },
+];
 
 // Pantry items: worden getoond in ingrediëntenlijst maar NIET aan boodschappenlijst toegevoegd
 const PANTRY_ITEMS = new Set([
@@ -36,6 +44,17 @@ function saveState() {
   localStorage.setItem('ma_shopping', JSON.stringify(shoppingList));
   localStorage.setItem('ma_counts',   JSON.stringify(counts));
   localStorage.setItem('ma_daglog',   JSON.stringify(dagLog));
+}
+
+function saveWellbeing() {
+  localStorage.setItem('ma_wellbeing', JSON.stringify(wellbeing));
+}
+
+function loadWellbeing(defaultData) {
+  try {
+    const s = localStorage.getItem('ma_wellbeing');
+    wellbeing = s ? JSON.parse(s) : (defaultData || {});
+  } catch { wellbeing = {}; }
 }
 
 function loadState(defaultMeals) {
@@ -698,6 +717,9 @@ function initModalClose() {
   document.getElementById('edit-modal').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeEditMeal();
   });
+  document.getElementById('wellbeing-modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeWellbeingModal();
+  });
 }
 
 // ===== TOAST =====
@@ -785,6 +807,8 @@ function renderDagboek() {
     selectBtn.title = multiSelectMode ? 'Annuleer selectie' : 'Selecteer dagen';
   }
 
+  renderWellbeingOverview();
+
   const list = document.getElementById('dagboek-list');
   list.innerHTML = days.map(date => {
     const key = dateKey(date);
@@ -815,6 +839,7 @@ function renderDagboek() {
           : (totals.cal > 0 ? `🔥 ${totals.cal} · 💪 ${totals.eiwit}g` : '—')}</div>
       </div>
       <div class="day-meals">${chips}</div>
+      ${renderWellbeingIndicator(key)}
     </div>`;
   }).join('');
 }
@@ -822,6 +847,187 @@ function renderDagboek() {
 function changeWeek(delta) {
   currentWeekOffset += delta;
   renderDagboek();
+}
+
+// ===== WELLBEING =====
+
+function getWellbeingStats(daysBack, fromDate) {
+  const base = fromDate || new Date();
+  const buckets = {};
+  WELLBEING_CATS.forEach(c => { buckets[c.key] = []; });
+  for (let i = 0; i < daysBack; i++) {
+    const d = new Date(base);
+    d.setDate(base.getDate() - i);
+    const entry = wellbeing[dateKey(d)];
+    if (!entry) continue;
+    WELLBEING_CATS.forEach(c => {
+      if (entry[c.key] != null) buckets[c.key].push(entry[c.key]);
+    });
+  }
+  const result = {};
+  WELLBEING_CATS.forEach(c => {
+    const vals = buckets[c.key];
+    result[c.key] = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+  });
+  return result;
+}
+
+function renderWellbeingOverview() {
+  const el = document.getElementById('wellbeing-overview');
+  if (!el) return;
+
+  const now = new Date();
+  const cur = getWellbeingStats(7, now);
+  const prevBase = new Date(now);
+  prevBase.setDate(now.getDate() - 7);
+  const prev = getWellbeingStats(7, prevBase);
+
+  const hasAny = WELLBEING_CATS.some(c => cur[c.key] !== null);
+
+  // Collect recent notes
+  const recentNotes = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    const k = dateKey(d);
+    const entry = wellbeing[k];
+    if (entry && entry.notitie) {
+      recentNotes.push({ date: d, key: k, text: entry.notitie });
+    }
+  }
+
+  let rows = '';
+  WELLBEING_CATS.forEach(c => {
+    const avg = cur[c.key];
+    let trendHTML = '<span class="wb-trend wb-trend-neutral">→</span>';
+    if (avg !== null && prev[c.key] !== null) {
+      const diff = avg - prev[c.key];
+      if (diff > 0.5) {
+        const good = c.higherIsBetter;
+        trendHTML = `<span class="wb-trend ${good ? 'wb-trend-good' : 'wb-trend-bad'}">↑</span>`;
+      } else if (diff < -0.5) {
+        const good = !c.higherIsBetter;
+        trendHTML = `<span class="wb-trend ${good ? 'wb-trend-good' : 'wb-trend-bad'}">↓</span>`;
+      }
+    }
+    rows += `<div class="wb-row">
+      <span class="wb-cat-label">${c.emoji} ${c.label}</span>
+      <span class="wb-avg">${avg !== null ? avg.toFixed(1) : '–'}</span>
+      ${trendHTML}
+    </div>`;
+  });
+
+  const notesToggle = recentNotes.length
+    ? `<button class="wb-notes-toggle" onclick="toggleWellbeingNotes()">▶ Notities (${recentNotes.length})</button>
+       <div id="wb-notes-list" class="wb-notes-list" hidden>${recentNotes.map(n =>
+         `<div class="wb-note-row"><span class="wb-note-date">${DAG_NL[n.date.getDay()]} ${n.date.getDate()} ${MAAND_NL[n.date.getMonth()]}</span><span class="wb-note-text">${escapeHTML(n.text)}</span></div>`
+       ).join('')}</div>`
+    : '';
+
+  el.innerHTML = `<div class="wellbeing-overview">
+    <div class="wb-header">
+      <span class="wb-title">😊 Hoe voel je je?</span>
+      <span class="wb-subtitle">afgelopen 7 dagen</span>
+    </div>
+    ${hasAny ? rows : '<p class="wb-no-data">Nog geen scores ingevuld — tik op een dag om te starten.</p>'}
+    ${notesToggle}
+  </div>`;
+}
+
+function toggleWellbeingNotes() {
+  const list = document.getElementById('wb-notes-list');
+  const btn = document.querySelector('.wb-notes-toggle');
+  if (!list || !btn) return;
+  const hidden = list.hasAttribute('hidden');
+  if (hidden) { list.removeAttribute('hidden'); btn.textContent = btn.textContent.replace('▶', '▼'); }
+  else { list.setAttribute('hidden', ''); btn.textContent = btn.textContent.replace('▼', '▶'); }
+}
+
+function renderWellbeingIndicator(key) {
+  const entry = wellbeing[key];
+  const hasSome = entry && WELLBEING_CATS.some(c => entry[c.key] != null);
+  if (hasSome) {
+    const parts = WELLBEING_CATS
+      .filter(c => entry[c.key] != null)
+      .map(c => `${c.emoji}${entry[c.key]}`);
+    return `<div class="day-wellbeing" onclick="event.stopPropagation();openWellbeingModal('${key}')">${parts.join(' · ')}</div>`;
+  }
+  return `<div class="day-wellbeing add-wellbeing" onclick="event.stopPropagation();openWellbeingModal('${key}')">+ gevoelsscore</div>`;
+}
+
+function openWellbeingModal(key) {
+  currentWellbeingKey = key;
+  const existing = wellbeing[key] || {};
+  wellbeingDraft = { notitie: existing.notitie || '' };
+  WELLBEING_CATS.forEach(c => { wellbeingDraft[c.key] = existing[c.key] ?? null; });
+
+  const date = new Date(key);
+  let scoreRows = WELLBEING_CATS.map(c => {
+    const sel = wellbeingDraft[c.key];
+    const btns = Array.from({ length: 10 }, (_, i) => {
+      const v = i + 1;
+      return `<button type="button" class="wb-score-btn${sel === v ? ' active' : ''}" data-cat="${c.key}" data-val="${v}" onclick="selectWellbeingScore('${c.key}',${v})">${v}</button>`;
+    }).join('');
+    return `<div class="wb-score-row-wrap">
+      <div class="wb-score-label">${c.emoji} ${c.label}</div>
+      <div class="wb-score-row">${btns}</div>
+    </div>`;
+  }).join('');
+
+  const hasEntry = WELLBEING_CATS.some(c => existing[c.key] != null);
+
+  document.getElementById('wellbeing-content').innerHTML = `
+    <div class="wb-modal-title">😊 Hoe voel je je?</div>
+    <div class="wb-modal-date">${DAG_NL[date.getDay()]} ${date.getDate()} ${MAAND_NL[date.getMonth()]}</div>
+    ${scoreRows}
+    <div class="wb-score-row-wrap">
+      <div class="wb-score-label">📝 Context <small>(optioneel)</small></div>
+      <textarea id="wb-notitie" class="wb-notes-input" rows="2" placeholder="Bijv. drukke werkdag, slecht geslapen door kinderen…">${escapeHTML(wellbeingDraft.notitie)}</textarea>
+    </div>
+    <div class="wb-actions">
+      <button class="btn-primary" onclick="submitWellbeing()">Opslaan</button>
+      ${hasEntry ? `<button class="btn-ghost danger" onclick="clearWellbeing()">Wissen</button>` : ''}
+    </div>`;
+
+  document.getElementById('wellbeing-modal').removeAttribute('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeWellbeingModal() {
+  document.getElementById('wellbeing-modal').setAttribute('hidden', '');
+  document.body.style.overflow = '';
+  currentWellbeingKey = null;
+  renderDagboek();
+}
+
+function selectWellbeingScore(cat, val) {
+  wellbeingDraft[cat] = val;
+  document.querySelectorAll(`.wb-score-btn[data-cat="${cat}"]`).forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.val) === val);
+  });
+}
+
+function submitWellbeing() {
+  if (!currentWellbeingKey) return;
+  const notitie = (document.getElementById('wb-notitie')?.value || '').trim();
+  wellbeingDraft.notitie = notitie;
+  wellbeing[currentWellbeingKey] = { ...wellbeingDraft };
+  // Remove nulls for cleaner storage
+  WELLBEING_CATS.forEach(c => {
+    if (wellbeing[currentWellbeingKey][c.key] === null) delete wellbeing[currentWellbeingKey][c.key];
+  });
+  if (!notitie) delete wellbeing[currentWellbeingKey].notitie;
+  saveWellbeing();
+  showToast('Scores opgeslagen');
+  closeWellbeingModal();
+}
+
+function clearWellbeing() {
+  if (!currentWellbeingKey) return;
+  delete wellbeing[currentWellbeingKey];
+  saveWellbeing();
+  showToast('Scores gewist');
+  closeWellbeingModal();
 }
 
 function toggleSelectMode() {
@@ -1131,11 +1337,17 @@ function exportMealsJSON() {
 // ===== INIT =====
 async function init() {
   let defaultMeals = [];
+  let defaultWellbeing = {};
   try {
     const res = await fetch('./meals.json');
     defaultMeals = await res.json();
   } catch { /* blijf doorgaan met lege array als fetch mislukt */ }
+  try {
+    const res = await fetch('./wellbeing.json');
+    defaultWellbeing = await res.json();
+  } catch { /* standaard lege object */ }
   loadState(defaultMeals);
+  loadWellbeing(defaultWellbeing);
   renderMeals();
   updateShoppingBadge();
   initFilters();

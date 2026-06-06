@@ -1315,3 +1315,189 @@ html, body {
 .instr-btn:active:not(:disabled) { background: #E8F5E9; }
 .instr-del { border-color: #FFCDD2; color: #C62828; }
 .instr-del:active { background: #FDECEA; }
+
+/* ===== WELLBEING OVERVIEW (dagboek tab) ===== */
+#wellbeing-overview {
+  padding: 0 16px 4px;
+}
+.wellbeing-overview {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 14px 16px 10px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.06);
+  margin-bottom: 4px;
+}
+.wb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.wb-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.wb-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.wb-row {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  gap: 8px;
+}
+.wb-cat-label {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-mid);
+}
+.wb-avg {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  min-width: 36px;
+  text-align: right;
+}
+.wb-trend {
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+}
+.wb-trend-good    { color: #2E7D52; }
+.wb-trend-bad     { color: var(--danger); }
+.wb-trend-neutral { color: var(--text-muted); }
+.wb-no-data {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 4px 0 8px;
+}
+.wb-notes-toggle {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 8px 0 2px;
+  font-weight: 600;
+  text-align: left;
+  width: 100%;
+}
+.wb-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+}
+.wb-note-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border-radius: 10px;
+}
+.wb-note-date {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.wb-note-text {
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.4;
+}
+
+/* ===== WELLBEING DAY-CARD INDICATOR ===== */
+.day-wellbeing {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  letter-spacing: 0.2px;
+  padding: 4px 8px;
+  background: var(--primary-pale);
+  border-radius: 8px;
+  display: inline-block;
+  cursor: pointer;
+}
+.day-wellbeing.add-wellbeing {
+  color: var(--text-muted);
+  background: var(--bg);
+  font-weight: 500;
+}
+
+/* ===== WELLBEING MODAL ===== */
+.wb-modal-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  padding: 4px 0 2px;
+}
+.wb-modal-date {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+.wb-score-row-wrap {
+  margin-bottom: 16px;
+}
+.wb-score-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+}
+.wb-score-label small {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+.wb-score-row {
+  display: flex;
+  gap: 4px;
+}
+.wb-score-btn {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 0;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.wb-score-btn:active { opacity: 0.7; }
+.wb-score-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+.wb-notes-input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+.wb-notes-input:focus { border-color: var(--primary-light); }
+.wb-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-bottom: 8px;
+}
+.wb-actions .btn-primary { flex: 1; }
