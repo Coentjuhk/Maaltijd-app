@@ -278,7 +278,7 @@
     "categorie": "diner",
     "invriesbaar": true,
     "dagtype": "beide",
-    "calorieen": 575,
+    "calorieen": 565,
     "eiwitten": 40,
     "ingredienten": [
       "600 g mager rundergehakt",
@@ -676,5 +676,57 @@
     "notes": "Hartige achtervang voor de avonden dat de trek toeslaat. Dip van magere kwark + sriracha of mosterd = bijna 0 kcal extra. Blijf bij kipfilet (geen dij/vel) en houd het paneerlaagje dun — dat is de stille calorie-toevoeging. Als extra bovenop je dagschema telt het mee: prima op een sportdag, terughoudender op een rustdag.",
     "porties": 3,
     "bewaren": "3–4 dagen koelkast | goed invriesbaar"
+  },
+  {
+    "id": 25,
+    "naam": "Mosterddip (kwark)",
+    "emoji": "🥣",
+    "kleur": "orange",
+    "categorie": "snack",
+    "invriesbaar": false,
+    "dagtype": "beide",
+    "calorieen": 75,
+    "eiwitten": 13,
+    "ingredienten": [
+      "150 g magere kwark",
+      "1-2 tl mosterd",
+      "Snufje peper, klein snufje zout",
+      "Optioneel: paar druppels citroen"
+    ],
+    "bereidingswijze": "Roer alle ingrediënten door elkaar tot een gladde dip. Direct klaar.\n\nBegin met 1 tl mosterd, proef, en bouw op naar smaak.",
+    "instructions": [
+      "Roer de kwark, mosterd, peper en zout door elkaar tot een gladde dip.",
+      "Begin met 1 tl mosterd, proef en bouw op naar smaak. Eventueel een paar druppels citroen voor frisheid."
+    ],
+    "notes": "Vaste dip bij de kipbites. Bijna gratis qua calorieën, hartig en eiwitrijk. Maak op zondag mee tijdens de mealprep als buffer tegen ongepland snacken. Een snufje zout tilt de smaak flink op zonder kcal.",
+    "porties": 1,
+    "bewaren": "3–4 dagen koelkast | niet invriezen"
+  },
+  {
+    "id": 26,
+    "naam": "Tzatziki-dip (kwark)",
+    "emoji": "🥒",
+    "kleur": "green",
+    "categorie": "snack",
+    "invriesbaar": false,
+    "dagtype": "beide",
+    "calorieen": 75,
+    "eiwitten": 13,
+    "ingredienten": [
+      "150 g magere kwark",
+      "⅓ komkommer, geraspt en uitgeknepen",
+      "1 klein teentje knoflook, fijngesneden of geperst",
+      "Scheutje citroen, peper, snufje zout",
+      "Optioneel: verse dille of munt"
+    ],
+    "bereidingswijze": "Knijp de geraspte komkommer goed uit boven de gootsteen, anders wordt de dip waterig.\n\nMeng alles door elkaar. Wordt lekkerder als de knoflook even intrekt — maak gerust de avond ervoor.",
+    "instructions": [
+      "Rasp de komkommer en knijp hem goed uit boven de gootsteen, anders wordt de dip waterig.",
+      "Meng de kwark, komkommer, knoflook, citroen, peper en zout door elkaar.",
+      "Laat eventueel intrekken (de avond ervoor maken maakt 'm lekkerder). Optioneel verse dille of munt erdoor."
+    ],
+    "notes": "Vaste dip bij de komkommer. Bijna gratis qua calorieën, hartig en eiwitrijk. Frisse varianten (dille, bieslook) passen het best bij komkommer; mosterd en pittige varianten bij de kip.",
+    "porties": 1,
+    "bewaren": "2–3 dagen koelkast | niet invriezen"
   }
 ]

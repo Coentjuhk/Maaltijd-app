@@ -50,6 +50,32 @@ function saveWellbeing() {
   localStorage.setItem('ma_wellbeing', JSON.stringify(wellbeing));
 }
 
+// Eenmalige migratie: oude sleutels werden met toISOString() (UTC) opgeslagen,
+// waardoor ze in NL een dag te vroeg stonden. Verschuif bestaande data +1 dag
+// zodat ze op dezelfde dag blijven staan als waarop ze gelogd zijn.
+function migrateDateKeys() {
+  if (localStorage.getItem('ma_datekey_migrated_v1')) return;
+  const shift = obj => {
+    if (!obj || typeof obj !== 'object') return obj;
+    const out = {};
+    Object.keys(obj).forEach(key => {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(key)) {
+        const d = keyToDate(key);
+        d.setDate(d.getDate() + 1);
+        out[dateKey(d)] = obj[key];
+      } else {
+        out[key] = obj[key];
+      }
+    });
+    return out;
+  };
+  dagLog = shift(dagLog);
+  wellbeing = shift(wellbeing);
+  saveState();
+  saveWellbeing();
+  localStorage.setItem('ma_datekey_migrated_v1', '1');
+}
+
 function loadWellbeing(defaultData) {
   try {
     const s = localStorage.getItem('ma_wellbeing');
@@ -744,7 +770,16 @@ function escapeAttr(str) { return escapeHTML(str); }
 
 // ===== DAGBOEK =====
 function dateKey(date) {
-  return date.toISOString().slice(0, 10);
+  // Lokale datum (niet toISOString → die converteert naar UTC en geeft in NL de vorige dag)
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+// Parse een YYYY-MM-DD sleutel naar een lokale datum (middag, om DST-randen te vermijden)
+function keyToDate(key) {
+  return new Date(key + 'T12:00:00');
 }
 
 function parseCustomItem(entry) {
@@ -807,8 +842,6 @@ function renderDagboek() {
     selectBtn.title = multiSelectMode ? 'Annuleer selectie' : 'Selecteer dagen';
   }
 
-  renderWellbeingOverview();
-
   const list = document.getElementById('dagboek-list');
   list.innerHTML = days.map(date => {
     const key = dateKey(date);
@@ -851,106 +884,17 @@ function changeWeek(delta) {
 
 // ===== WELLBEING =====
 
-function getWellbeingStats(daysBack, fromDate) {
-  const base = fromDate || new Date();
-  const buckets = {};
-  WELLBEING_CATS.forEach(c => { buckets[c.key] = []; });
-  for (let i = 0; i < daysBack; i++) {
-    const d = new Date(base);
-    d.setDate(base.getDate() - i);
-    const entry = wellbeing[dateKey(d)];
-    if (!entry) continue;
-    WELLBEING_CATS.forEach(c => {
-      if (entry[c.key] != null) buckets[c.key].push(entry[c.key]);
-    });
-  }
-  const result = {};
-  WELLBEING_CATS.forEach(c => {
-    const vals = buckets[c.key];
-    result[c.key] = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
-  });
-  return result;
-}
-
-function renderWellbeingOverview() {
-  const el = document.getElementById('wellbeing-overview');
-  if (!el) return;
-
-  const now = new Date();
-  const cur = getWellbeingStats(7, now);
-  const prevBase = new Date(now);
-  prevBase.setDate(now.getDate() - 7);
-  const prev = getWellbeingStats(7, prevBase);
-
-  const hasAny = WELLBEING_CATS.some(c => cur[c.key] !== null);
-
-  // Collect recent notes
-  const recentNotes = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(now);
-    d.setDate(now.getDate() - i);
-    const k = dateKey(d);
-    const entry = wellbeing[k];
-    if (entry && entry.notitie) {
-      recentNotes.push({ date: d, key: k, text: entry.notitie });
-    }
-  }
-
-  let rows = '';
-  WELLBEING_CATS.forEach(c => {
-    const avg = cur[c.key];
-    let trendHTML = '<span class="wb-trend wb-trend-neutral">→</span>';
-    if (avg !== null && prev[c.key] !== null) {
-      const diff = avg - prev[c.key];
-      if (diff > 0.5) {
-        const good = c.higherIsBetter;
-        trendHTML = `<span class="wb-trend ${good ? 'wb-trend-good' : 'wb-trend-bad'}">↑</span>`;
-      } else if (diff < -0.5) {
-        const good = !c.higherIsBetter;
-        trendHTML = `<span class="wb-trend ${good ? 'wb-trend-good' : 'wb-trend-bad'}">↓</span>`;
-      }
-    }
-    rows += `<div class="wb-row">
-      <span class="wb-cat-label">${c.emoji} ${c.label}</span>
-      <span class="wb-avg">${avg !== null ? avg.toFixed(1) : '–'}</span>
-      ${trendHTML}
-    </div>`;
-  });
-
-  const notesToggle = recentNotes.length
-    ? `<button class="wb-notes-toggle" onclick="toggleWellbeingNotes()">▶ Notities (${recentNotes.length})</button>
-       <div id="wb-notes-list" class="wb-notes-list" hidden>${recentNotes.map(n =>
-         `<div class="wb-note-row"><span class="wb-note-date">${DAG_NL[n.date.getDay()]} ${n.date.getDate()} ${MAAND_NL[n.date.getMonth()]}</span><span class="wb-note-text">${escapeHTML(n.text)}</span></div>`
-       ).join('')}</div>`
-    : '';
-
-  el.innerHTML = `<div class="wellbeing-overview">
-    <div class="wb-header">
-      <span class="wb-title">😊 Hoe voel je je?</span>
-      <span class="wb-subtitle">afgelopen 7 dagen</span>
-    </div>
-    ${hasAny ? rows : '<p class="wb-no-data">Nog geen scores ingevuld — tik op een dag om te starten.</p>'}
-    ${notesToggle}
-  </div>`;
-}
-
-function toggleWellbeingNotes() {
-  const list = document.getElementById('wb-notes-list');
-  const btn = document.querySelector('.wb-notes-toggle');
-  if (!list || !btn) return;
-  const hidden = list.hasAttribute('hidden');
-  if (hidden) { list.removeAttribute('hidden'); btn.textContent = btn.textContent.replace('▶', '▼'); }
-  else { list.setAttribute('hidden', ''); btn.textContent = btn.textContent.replace('▼', '▶'); }
-}
-
 function renderWellbeingIndicator(key) {
   const entry = wellbeing[key];
   const hasSome = entry && WELLBEING_CATS.some(c => entry[c.key] != null);
-  if (hasSome) {
+  const note = entry && entry.notitie ? entry.notitie : '';
+  if (hasSome || note) {
     const parts = WELLBEING_CATS
       .filter(c => entry[c.key] != null)
       .map(c => `${c.emoji}${entry[c.key]}`);
-    return `<div class="day-wellbeing" onclick="event.stopPropagation();openWellbeingModal('${key}')">${parts.join(' · ')}</div>`;
+    const scoresHTML = parts.length ? `<span class="day-wb-scores">${parts.join(' · ')}</span>` : '';
+    const noteHTML = note ? `<span class="day-wb-note">📝 ${escapeHTML(note)}</span>` : '';
+    return `<div class="day-wellbeing" onclick="event.stopPropagation();openWellbeingModal('${key}')">${scoresHTML}${noteHTML}</div>`;
   }
   return `<div class="day-wellbeing add-wellbeing" onclick="event.stopPropagation();openWellbeingModal('${key}')">+ gevoelsscore</div>`;
 }
@@ -961,7 +905,7 @@ function openWellbeingModal(key) {
   wellbeingDraft = { notitie: existing.notitie || '' };
   WELLBEING_CATS.forEach(c => { wellbeingDraft[c.key] = existing[c.key] ?? null; });
 
-  const date = new Date(key);
+  const date = keyToDate(key);
   let scoreRows = WELLBEING_CATS.map(c => {
     const sel = wellbeingDraft[c.key];
     const btns = Array.from({ length: 10 }, (_, i) => {
@@ -1090,15 +1034,29 @@ function pasteSelectedDays() {
   showToast(`${n} dag${n !== 1 ? 'en' : ''} ingeplakt!`);
 }
 
+// Geeft tekstregels terug met de gevoelsscores + notitie van een dag (voor export)
+function wellbeingExportLines(key, indent = '  ') {
+  const entry = wellbeing[key];
+  if (!entry) return [];
+  const lines = [];
+  const parts = WELLBEING_CATS
+    .filter(c => entry[c.key] != null)
+    .map(c => `${c.emoji} ${c.label} ${entry[c.key]}/5`);
+  if (parts.length) lines.push(`${indent}${parts.join(' · ')}`);
+  if (entry.notitie) lines.push(`${indent}📝 ${entry.notitie}`);
+  return lines;
+}
+
 function exportSelectedDays() {
   if (selectedDays.size === 0) { showToast('Selecteer eerst dagen'); return; }
   const keys = [...selectedDays].sort();
   const lines = [];
   let totalCal = 0, totalEiwit = 0;
   keys.forEach(key => {
-    const date = new Date(key + 'T12:00:00');
+    const date = keyToDate(key);
     const totals = getDayTotals(key);
     lines.push(`${DAG_NL[date.getDay()]} ${date.getDate()} ${MAAND_NL[date.getMonth()]}`);
+    wellbeingExportLines(key).forEach(l => lines.push(l));
     const ids = dagLog[key] || [];
     if (!ids.length) {
       lines.push('  Niets gelogd');
@@ -1150,7 +1108,7 @@ function closeDayPicker() {
 }
 
 function renderDayPickerContent(key) {
-  const date = new Date(key);
+  const date = keyToDate(key);
   const selected = dagLog[key] || [];
   const CAT_ORDER = ['ontbijt', 'lunch', 'snack', 'diner'];
 
@@ -1292,6 +1250,7 @@ function copyWeekSummary() {
     });
 
     lines.push(`${DAG_NL[date.getDay()]} ${date.getDate()} ${MAAND_NL[date.getMonth()]}`);
+    wellbeingExportLines(key).forEach(l => lines.push(l));
     if (dayLines.length) {
       dayLines.forEach(l => lines.push(l));
       lines.push(`  Totaal: 🔥 ${totals.cal} kcal · 💪 ${totals.eiwit}g eiwit`);
@@ -1348,6 +1307,7 @@ async function init() {
   } catch { /* standaard lege object */ }
   loadState(defaultMeals);
   loadWellbeing(defaultWellbeing);
+  migrateDateKeys();
   renderMeals();
   updateShoppingBadge();
   initFilters();
