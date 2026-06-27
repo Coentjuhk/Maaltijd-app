@@ -84,7 +84,7 @@ function loadWellbeing(defaultData) {
 }
 
 function loadState(defaultMeals) {
-  const MEALS_VERSION = 3;
+  const MEALS_VERSION = 4;
   const storedVersion = parseInt(localStorage.getItem('ma_meals_version') || '1');
   if (storedVersion < MEALS_VERSION) {
     localStorage.removeItem('ma_meals');
