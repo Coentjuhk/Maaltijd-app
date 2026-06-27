@@ -648,7 +648,7 @@
   },
   {
     "id": 24,
-    "naam": "Air Fryer Kipbites",
+    "naam": "Air Fryer Kipfilet Reepjes",
     "emoji": "🍗",
     "kleur": "orange",
     "categorie": "snack",
@@ -665,11 +665,11 @@
       "¾ tl zout",
       "½ tl zwarte peper"
     ],
-    "bereidingswijze": "Snijd de kipfilet in gelijkmatige blokjes van ~2-3 cm.\n\nMeng het paneermeel met paprikapoeder, knoflookpoeder, zout en peper in een kom.\n\nKlop de eieren los in een aparte kom. Haal de kipblokjes eerst door het ei, daarna door het paneermengsel.\n\nLeg de kip in één laag in de air fryer. Bak 12-15 min op 200°C, halverwege schudden, tot goudbruin en gaar.\n\nLaat afkoelen en bewaar in een afgesloten bak. Houdbaar 3-4 dagen.",
+    "bereidingswijze": "Snijd de kipfilet in gelijkmatige reepjes van ~1,5 cm dik.\n\nMeng het paneermeel met paprikapoeder, knoflookpoeder, zout en peper in een kom.\n\nKlop de eieren los in een aparte kom. Haal de kipreepjes eerst door het ei, daarna door het paneermengsel.\n\nLeg de kip in één laag in de air fryer. Bak 12-15 min op 200°C, halverwege schudden, tot goudbruin en gaar.\n\nLaat afkoelen en bewaar in een afgesloten bak. Houdbaar 3-4 dagen.",
     "instructions": [
-      "Snijd de kipfilet in gelijkmatige blokjes van ~2-3 cm. Gelijke grootte zorgt voor gelijkmatig garen.",
+      "Snijd de kipfilet in gelijkmatige reepjes van ~1,5 cm dik. Gelijke grootte zorgt voor gelijkmatig garen.",
       "Meng het paneermeel met paprikapoeder, knoflookpoeder, zout en peper in een kom of diep bord.",
-      "Klop de eieren los in een aparte kom. Haal de kipblokjes eerst door het ei, daarna door het kruiden-paneermengsel. Een dun laagje is genoeg voor de crunch.",
+      "Klop de eieren los in een aparte kom. Haal de kipreepjes eerst door het ei, daarna door het kruiden-paneermengsel. Een dun laagje is genoeg voor de crunch.",
       "Leg de kip in één laag in de air fryer (in batches als nodig). Bak 12-15 min op 200°C, halverwege schudden, tot goudbruin en gaar.",
       "Laat afkoelen en bewaar in een afgesloten bak in de koelkast. Opwarmen kan kort in de air fryer voor de crunch. Houdbaar 3-4 dagen."
     ],
@@ -698,7 +698,7 @@
       "Roer de kwark, mosterd, peper en zout door elkaar tot een gladde dip.",
       "Begin met 1 tl mosterd, proef en bouw op naar smaak. Eventueel een paar druppels citroen voor frisheid."
     ],
-    "notes": "Vaste dip bij de kipbites. Bijna gratis qua calorieën, hartig en eiwitrijk. Maak op zondag mee tijdens de mealprep als buffer tegen ongepland snacken. Een snufje zout tilt de smaak flink op zonder kcal.",
+    "notes": "Vaste dip bij de kipfilet reepjes. Bijna gratis qua calorieën, hartig en eiwitrijk. Maak op zondag mee tijdens de mealprep als buffer tegen ongepland snacken. Een snufje zout tilt de smaak flink op zonder kcal.",
     "porties": 1,
     "bewaren": "3–4 dagen koelkast | niet invriezen"
   },
@@ -728,5 +728,27 @@
     "notes": "Vaste dip bij de komkommer. Bijna gratis qua calorieën, hartig en eiwitrijk. Frisse varianten (dille, bieslook) passen het best bij komkommer; mosterd en pittige varianten bij de kip.",
     "porties": 1,
     "bewaren": "2–3 dagen koelkast | niet invriezen"
+  },
+  {
+    "id": 27,
+    "naam": "2 Eieren met Kipfilet",
+    "emoji": "🍳",
+    "kleur": "orange",
+    "categorie": "snack",
+    "invriesbaar": false,
+    "dagtype": "beide",
+    "calorieen": 225,
+    "eiwitten": 28,
+    "ingredienten": [
+      "2 eieren",
+      "75 g kipfilet (vleeswaren)"
+    ],
+    "bereidingswijze": "Kook de eieren 8–10 minuten hard. Koel af onder koud water en pel.\n\nServeer met 75 g kipfilet. Direct serveren.",
+    "instructions": [
+      "Kook de eieren 8–10 minuten hard. Koel af onder koud water en pel.",
+      "Serveer met 75 g kipfilet (vleeswaren). Direct serveren."
+    ],
+    "notes": "Snelle, eiwitrijke snack (~28 g eiwit). Fijn als hartige tussendoor of klein ontbijt.",
+    "porties": 1
   }
 ]
